@@ -349,7 +349,7 @@ body {
   letter-spacing: -0.06em !important; 
 }
 
-/* 1. 배경색 (성운의 다크 퍼플) */
+/* 1. 가장 밑바닥(html) 배경색 */
 html.dark, 
 html[data-theme="dark"] {
   background-color: #0b0710 !important; 
@@ -360,7 +360,7 @@ html[data-theme="dark"] body {
   background-color: transparent !important;
 }
 
-/* 2. 별무리 뼈대 (앞면, 뒷면 두 개의 레이어 생성) */
+/* 2. 별무리 뼈대 */
 html.dark body::before,
 html[data-theme="dark"] body::before,
 html.dark body::after,
@@ -372,33 +372,46 @@ html[data-theme="dark"] body::after {
   pointer-events: none; 
 }
 
-/* 3. 뒷면 레이어 (아주 작고 먼 별들, 느리게 이동) */
+/* 3. 뒷면 레이어 (아주 작고 먼 별들, 거대한 도화지에 불규칙하게 흩뿌림) */
 html.dark body::before,
 html[data-theme="dark"] body::before {
   background-image: 
-    radial-gradient(1px 1px at 25px 5px, rgba(255,255,255,0.4) 100%, transparent),
-    radial-gradient(1px 1px at 50px 25px, rgba(255,255,255,0.2) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 125px 20px, rgba(255,255,255,0.3) 100%, transparent),
-    radial-gradient(2px 2px at 50px 75px, rgba(255,255,255,0.15) 100%, transparent),
-    radial-gradient(1px 1px at 15px 125px, rgba(255,255,255,0.4) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 110px 80px, rgba(255,255,255,0.25) 100%, transparent);
-  background-size: 150px 150px;
-  animation: starDrift 60s linear infinite; /* 60초 동안 아주 느리게 */
+    radial-gradient(1px 1px at 100px 150px, rgba(255,255,255,0.4) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 300px 450px, rgba(255,255,255,0.3) 100%, transparent),
+    radial-gradient(1px 1px at 800px 200px, rgba(255,255,255,0.2) 100%, transparent),
+    radial-gradient(2px 2px at 500px 850px, rgba(255,255,255,0.15) 100%, transparent),
+    radial-gradient(1px 1px at 200px 900px, rgba(255,255,255,0.4) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 700px 650px, rgba(255,255,255,0.25) 100%, transparent),
+    radial-gradient(1px 1px at 900px 50px, rgba(255,255,255,0.3) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 50px 700px, rgba(255,255,255,0.2) 100%, transparent),
+    radial-gradient(1px 1px at 400px 300px, rgba(255,255,255,0.35) 100%, transparent),
+    radial-gradient(2px 2px at 850px 950px, rgba(255,255,255,0.1) 100%, transparent);
+  background-size: 1000px 1000px; /* 타일 크기를 1000px로 대폭 확대 */
+  animation: starDriftFar 90s linear infinite;
 }
 
-/* 4. 앞면 레이어 (조금 더 크고 가까운 푸른빛 별들, 조금 더 빠르게 이동) */
+/* 4. 앞면 레이어 (조금 더 크고 푸른빛을 띠는 가까운 별들) */
 html.dark body::after,
 html[data-theme="dark"] body::after {
   background-image: 
-    radial-gradient(2px 2px at 75px 125px, rgba(150,200,255,0.25) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 20px 60px, rgba(200,200,255,0.3) 100%, transparent),
-    radial-gradient(2.5px 2.5px at 130px 130px, rgba(255,255,255,0.15) 100%, transparent);
-  background-size: 200px 200px;
-  animation: starDrift 40s linear infinite; /* 40초 동안 (입체감 부여) */
+    radial-gradient(2px 2px at 150px 200px, rgba(150,200,255,0.25) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 600px 800px, rgba(200,200,255,0.3) 100%, transparent),
+    radial-gradient(2.5px 2.5px at 1100px 300px, rgba(255,255,255,0.15) 100%, transparent),
+    radial-gradient(2px 2px at 300px 1200px, rgba(180,220,255,0.2) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 900px 1000px, rgba(220,220,255,0.25) 100%, transparent),
+    radial-gradient(2.5px 2.5px at 1300px 700px, rgba(255,255,255,0.1) 100%, transparent),
+    radial-gradient(2px 2px at 50px 1350px, rgba(150,200,255,0.3) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 800px 150px, rgba(255,255,255,0.2) 100%, transparent);
+  background-size: 1400px 1400px; /* 타일 크기를 1400px로 엇갈리게 설정 */
+  animation: starDriftNear 60s linear infinite;
 }
 
-/* 5. 별무리가 끝없이 위로 스르륵 흘러가는 애니메이션 */
-@keyframes starDrift {
+/* 5. 도화지 크기에 맞춰 끊김 없이 스크롤되는 애니메이션 */
+@keyframes starDriftFar {
   0% { background-position: 0px 0px; }
-  100% { background-position: 0px -600px; } 
+  100% { background-position: 0px -1000px; } 
+}
+@keyframes starDriftNear {
+  0% { background-position: 0px 0px; }
+  100% { background-position: 0px -1400px; } 
 }
