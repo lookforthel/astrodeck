@@ -325,11 +325,6 @@ mark {
   --tw-exit-translate-x: -50%;
 }
 
-/* 🇰🇷 한국어 폰트 및 가독성 최적화 패치 */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-@import url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.css');
-@import url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri.css');
-
 body {
   /* 기본 메뉴와 갤러리 글씨는 세련된 프리텐다드 고딕체로 덮어쓰기 */
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif !important;
