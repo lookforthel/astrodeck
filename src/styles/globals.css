@@ -338,11 +338,13 @@ body {
 }
 
 /* 소설 본문/ 마루 부리 */
-.novel-text {
-  font-family: 'MaruBuri', serif !important;
-  line-height: 1.85 !important; /* 호흡이 긴 문장들을 위해 줄 간격을 살짝 더 넓힘 */
-  font-size: 1.05rem !important; /* 모바일 기기에서의 시각적 피로도를 낮춤 */
-  word-break: keep-all !important;
-  text-align: justify !important; /* 양쪽 정렬로 전자책(e-book) 같은 단정한 느낌 부여 */
-  letter-spacing: -0.06em !important /자간 조절(숫자 커질수록 좁아짐)
+.novel-text,
+.novel-text p,
+.novel-text span {
+  font-family: 'MaruBuri', serif !important; /* 마루 부리 */
+  line-height: 1.85 !important;
+  font-size: 1.05rem !important;
+  word-break: keep-all !important; /* 단어가 중간에 쪼개져서 줄바꿈되지 않도록 보호 */
+  text-align: left !important; /좌측 정렬*/
+  letter-spacing: -0.06em !important; 
 }
