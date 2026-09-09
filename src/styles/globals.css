@@ -337,15 +337,20 @@ body {
   line-height: 1.7 !important;
 }
 
-/* 소설 본문/ 마루 부리 */
+:root {
+  --viewer-size: 1.05rem; 
+  --viewer-spacing: 1.85; 
+  --viewer-font: 'MaruBuri-Regular', serif;
+}
+
+/* 소설 본문에 리모컨 조종 변수 연결 (별표 * 필수!) */
 .novel-text,
-.novel-text p,
-.novel-text span {
-  font-family: 'MaruBuri-Regular', serif !important; /* 마루 부리 */
-  line-height: 1.85 !important;
-  font-size: 1.05rem !important;
-  word-break: keep-all !important; /* 단어가 중간에 쪼개져서 줄바꿈되지 않도록 보호 */
-  text-align: left !important; /* 좌측 정렬 */
+.novel-text * {
+  font-family: var(--viewer-font) !important;
+  line-height: var(--viewer-spacing) !important;
+  font-size: var(--viewer-size) !important;
+  word-break: keep-all !important;
+  text-align: left !important;
   letter-spacing: -0.06em !important; 
 }
 
