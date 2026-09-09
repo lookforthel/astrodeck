@@ -341,8 +341,12 @@ body {
   line-height: 1.7 !important;
 }
 
-/* 나중에 소설 본문(연재용)에만 적용할 깊이 있는 명조체 세팅 */
+/* 소설 본문/ 마루 부리 */
+@import url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri.css');
 .novel-text {
-  font-family: 'RIDIBatang', serif !important;
-  line-height: 1.8 !important;
+  font-family: 'MaruBuri', serif !important;
+  line-height: 1.85 !important; /* 호흡이 긴 문장들을 위해 줄 간격을 살짝 더 넓힘 */
+  font-size: 1.05rem !important; /* 모바일 기기에서의 시각적 피로도를 낮춤 */
+  word-break: keep-all !important;
+  text-align: justify !important; /* 양쪽 정렬로 전자책(e-book) 같은 단정한 느낌 부여 */
 }
