@@ -1,8 +1,6 @@
----
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
 import { getReadingTime } from '@/lib/reading-time';
 
 export async function getStaticPaths() {
@@ -88,7 +86,7 @@ function formatDate(date: Date) {
     </div>
 
     <header class="mb-12">
-      <div class="container max-w-3xl mx-auto px-6 sm:px-8">
+      <div class="container max-w-3xl mx-auto space-y-4">
         <h1 class="text-5xl font-bold tracking-tight">{post.data.title}</h1>
 
         <p class="text-xl text-muted-foreground">{post.data.description}</p>
@@ -120,7 +118,8 @@ function formatDate(date: Date) {
       </div>
     </header>
 
-    <div class="container max-w-3xl mx-auto">
+    <!-- 👇 여기가 진짜 본문이고, 여기에 여백(px-6 sm:px-8)이 들어가야 합니다 -->
+    <div class="container max-w-3xl mx-auto px-6 sm:px-8">
       <div class="prose prose-neutral dark:prose-invert max-w-none novel-text">
         <Content />
       </div>
@@ -215,15 +214,13 @@ function formatDate(date: Date) {
       </footer>
     </div>
   </article>
-</BaseLayout>
 
-</article>
-  
   <!-- 👇 진행바 뼈대 추가 -->
-  <div class="fixed top-0 left-0 w-full h-1 z-50 bg-transparent">
+  <div class="fixed top-0 left-0 w-full h-1 z-50 bg-transparent pointer-events-none">
     <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150"></div>
   </div>
 </BaseLayout>
+
 <script>
   function updateProgress() {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
