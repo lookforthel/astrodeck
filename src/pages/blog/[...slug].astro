@@ -220,18 +220,131 @@ function formatDate(date: Date) {
   <div class="fixed top-0 left-0 w-full h-1 z-50 bg-transparent pointer-events-none">
     <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150"></div>
   </div>
-</BaseLayout>
+<div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto">
+    <!-- 통합 컨트롤 패널 (기본 숨김) -->
+    <div id="viewer-menu" class="hidden flex-col bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl p-4 w-64 gap-4 origin-bottom-right transition-all">
+      
+      <!-- 1. 글꼴 선택 -->
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-medium text-muted-foreground">글꼴</span>
+        <div class="flex bg-muted rounded-lg p-1">
+          <button id="btn-font-serif" class="px-3 py-1 text-sm rounded-md bg-background shadow-sm transition-all">명조</button>
+          <button id="btn-font-sans" class="px-3 py-1 text-sm rounded-md hover:bg-background/50 transition-all">고딕</button>
+        </div>
+      </div>
+
+      <!-- 2. 글자 크기 -->
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-medium text-muted-foreground">크기</span>
+        <div class="flex items-center bg-muted rounded-lg p-1">
+          <button id="btn-text-minus" class="px-3 py-1 hover:bg-background/50 rounded-md transition-all">A-</button>
+          <span id="text-size-display" class="text-xs font-medium w-12 text-center">100%</span>
+          <button id="btn-text-plus" class="px-3 py-1 hover:bg-background/50 rounded-md transition-all">A+</button>
+        </div>
+      </div>
+
+      <!-- 3. 줄 간격 -->
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-medium text-muted-foreground">간격</span>
+        <div class="flex bg-muted rounded-lg p-1 gap-1">
+          <button id="btn-space-narrow" class="px-2 py-1 text-xs rounded-md hover:bg-background/50 transition-all">좁게</button>
+          <button id="btn-space-normal" class="px-2 py-1 text-xs rounded-md bg-background shadow-sm transition-all">보통</button>
+          <button id="btn-space-wide" class="px-2 py-1 text-xs rounded-md hover:bg-background/50 transition-all">넓게</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 톱니바퀴 토글 버튼 (마우스 올리면 선명해짐) -->
+    <button id="btn-remote-toggle" class="p-3 bg-card/80 backdrop-blur border border-border rounded-full shadow-lg opacity-70 hover:opacity-100 hover:border-primary/50 transition-all group">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-foreground group-hover:text-primary transition-colors">
+        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    </button>
+  </div>
+</BaseLayout> <!-- 👈 템플릿 닫는 태그 -->
 
 <script>
-  function updateProgress() {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    if (height > 0) {
-      const scrolled = (winScroll / height) * 100;
-      const bar = document.getElementById('progress-bar');
-      if (bar) bar.style.width = scrolled + '%';
-    }
-  }
-  window.addEventListener('scroll', updateProgress);
-  document.addEventListener('astro:page-load', updateProgress);
+  document.addEventListener('astro:page-load', () => {
+    // 1. 스크롤 진행바
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0 && progressBar) progressBar.style.width = (winScroll / height) * 100 + '%';
+    });
+
+    // 2. 뷰어 리모컨 기능
+    const btnToggle = document.getElementById('btn-remote-toggle');
+    const menu = document.getElementById('viewer-menu');
+    if(!btnToggle) return; 
+
+    // 저장된 설정 불러오기 (없으면 기본값)
+    let savedSize = parseFloat(localStorage.getItem('vSize')) || 1.05;
+    let savedSpacing = parseFloat(localStorage.getItem('vSpace')) || 1.85;
+    let savedFont = localStorage.getItem('vFont') || "'MaruBuri-Regular', serif";
+
+    // 글자 크기 적용 함수
+    const applySize = (size) => {
+      savedSize = size;
+      document.documentElement.style.setProperty('--viewer-size', `${size}rem`);
+      document.getElementById('text-size-display').innerText = `${Math.round((size / 1.05) * 100)}%`;
+      localStorage.setItem('vSize', size);
+    };
+
+    // 줄 간격 적용 함수
+    const applySpacing = (space) => {
+      savedSpacing = space;
+      document.documentElement.style.setProperty('--viewer-spacing', space);
+      localStorage.setItem('vSpace', space);
+      
+      // 버튼 스타일 업데이트
+      ['narrow', 'normal', 'wide'].forEach(type => {
+        document.getElementById(`btn-space-${type}`).classList.remove('bg-background', 'shadow-sm');
+      });
+      if(space === 1.6) document.getElementById('btn-space-narrow').classList.add('bg-background', 'shadow-sm');
+      else if(space === 1.85) document.getElementById('btn-space-normal').classList.add('bg-background', 'shadow-sm');
+      else document.getElementById('btn-space-wide').classList.add('bg-background', 'shadow-sm');
+    };
+
+    // 글꼴 적용 함수
+    const applyFont = (font) => {
+      savedFont = font;
+      document.documentElement.style.setProperty('--viewer-font', font);
+      localStorage.setItem('vFont', font);
+      
+      if(font.includes('MaruBuri')) {
+        document.getElementById('btn-font-serif').classList.add('bg-background', 'shadow-sm');
+        document.getElementById('btn-font-sans').classList.remove('bg-background', 'shadow-sm');
+      } else {
+        document.getElementById('btn-font-sans').classList.add('bg-background', 'shadow-sm');
+        document.getElementById('btn-font-serif').classList.remove('bg-background', 'shadow-sm');
+      }
+    };
+
+    // 페이지 켜질 때 저장된 설정 바로 입히기
+    applySize(savedSize);
+    applySpacing(savedSpacing);
+    applyFont(savedFont);
+
+    // 클릭 이벤트 연결
+    btnToggle.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('flex');
+    });
+    
+    document.getElementById('btn-text-plus').addEventListener('click', () => {
+      if (savedSize < 1.6) applySize(savedSize + 0.1);
+    });
+    document.getElementById('btn-text-minus').addEventListener('click', () => {
+      if (savedSize > 0.8) applySize(savedSize - 0.1);
+    });
+    
+    document.getElementById('btn-space-narrow').addEventListener('click', () => applySpacing(1.6));
+    document.getElementById('btn-space-normal').addEventListener('click', () => applySpacing(1.85));
+    document.getElementById('btn-space-wide').addEventListener('click', () => applySpacing(2.2));
+    
+    document.getElementById('btn-font-serif').addEventListener('click', () => applyFont("'MaruBuri-Regular', serif"));
+    document.getElementById('btn-font-sans').addEventListener('click', () => applyFont("'Pretendard', sans-serif"));
+  });
 </script>
