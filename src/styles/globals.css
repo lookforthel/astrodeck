@@ -344,4 +344,5 @@ body {
   font-size: 1.05rem !important; /* 모바일 기기에서의 시각적 피로도를 낮춤 */
   word-break: keep-all !important;
   text-align: justify !important; /* 양쪽 정렬로 전자책(e-book) 같은 단정한 느낌 부여 */
+  letter-spacing: -0.06em !important /자간 조절(숫자 커질수록 좁아짐)
 }
