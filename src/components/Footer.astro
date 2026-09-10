@@ -4,35 +4,14 @@
  *
  * Unified footer with boxed and fullWidth variants.
  * Contains navigation links, resources, and creator info.
- *
- * @example
- * ```astro
- * <Footer />
- * <Footer variant="fullWidth" />
- * ```
  */
 import Logo from './Logo.astro';
 
 interface Props {
-  /** Layout variant - boxed (default) or fullWidth */
   variant?: 'boxed' | 'fullWidth';
 }
 
 const { variant = 'boxed' } = Astro.props;
-
-const footerLinks = {
-  astrodeck: [
-    { href: '/', label: 'Home' },
-    { href: '/docs', label: 'Docs' },
-    { href: '/sections', label: 'Sections' },
-    { href: '/changelog', label: 'Changelog' },
-  ],
-  pages: [
-    { href: '/blog', label: 'Blog' },
-    { href: '/content', label: 'Content' },
-    { href: '/login', label: 'Login' },
-  ],
-};
 
 const containerClass =
   variant === 'fullWidth' ? 'w-full px-4' : 'container max-w-5xl mx-auto px-4 sm:px-6';
@@ -43,7 +22,6 @@ const containerClass =
 
     <!-- 1. 이웃/지인 배너 영역 (88x31 사이즈 추천) -->
     <div class="flex flex-wrap justify-center gap-3 opacity-70 hover:opacity-100 transition-opacity">
-      <!-- 배너 이미지를 구해서 href와 src를 수정하세요 -->
       <a href="#" target="_blank" class="hover:scale-105 transition-transform">
         <img src="https://via.placeholder.com/88x31/14101f/e2e8f0?text=LINK+01" alt="배너 1" class="w-[88px] h-[31px] rounded-[2px] border border-border/50" />
       </a>
@@ -52,8 +30,8 @@ const containerClass =
       </a>
     </div>
 
-    <!-- 2. 외부 링크 & 방문자 카운터 -->
-    <img src="https://hits.sh/mergeconflict.site.svg?style=flat-square&label=HITS&color=14101f&labelColor=0c0a10" alt="Hits" class="h-5 opacity-80 rounded-sm" />
+    <!-- 2. 외부 링크 & 방문자 카운터 영역 -->
+    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 text-sm text-muted-foreground font-mono">
       
       <!-- 플랫폼 링크 -->
       <div class="flex items-center gap-4">
@@ -64,17 +42,17 @@ const containerClass =
 
       <span class="hidden sm:inline text-border">|</span>
 
-      <!-- 방문자 카운터 (hits.seeyoufarm.com 무료 위젯) -->
+      <!-- 방문자 카운터 (Hits 위젯) -->
       <div class="flex items-center gap-2" title="누적 방문자 수">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fmergeconflict.site&count_bg=%2300000000&title_bg=%2300000000&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=true" alt="Hits" class="h-5 opacity-80" />
+        <img src="https://hits.sh/mergeconflict.site.svg?style=flat-square&label=HITS&color=14101f&labelColor=0c0a10" alt="Hits" class="h-5 opacity-80 rounded-sm" />
       </div>
 
     </div>
 
     <!-- 3. 카피라이트 -->
     <div class="text-xs text-muted-foreground/50 text-center font-sans">
-      <p>&copy; Copyright © 2026 둑중개 All Rights Reserved.</p>
+      <p>&copy; 2026 둑중개 All Rights Reserved.</p>
     </div>
 
   </div>
