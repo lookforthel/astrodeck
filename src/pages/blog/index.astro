@@ -24,19 +24,21 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
 }, {});
 ---
 
-<BaseLayout title="Merge Conflict" description="SF GL">
+<BaseLayout title="단행본 목록" description="하드 SF GL 웹소설">
   
-  <!-- 🛑 인증 팝업 (로컬 스토리지 연동) -->
+  <!-- 🛑 성인 인증 팝업 (로컬 스토리지 연동) -->
   <div id="age-gate-modal" class="fixed inset-0 z-[100] bg-background/95 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-300">
     <div class="bg-card border border-border rounded-2xl max-w-sm w-full p-8 shadow-2xl flex flex-col items-center text-center gap-6 relative">
       <div class="text-primary mb-2 opacity-80">
-        <!-- 자물쇠 아이콘 -->
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
           <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
         </svg>
       </div>
-      <h2 class="text-xl font-bold text-foreground">19 ↑?</h2>
+      <h2 class="text-xl font-bold text-foreground">Warning</h2>
+      <p class="text-muted-foreground text-sm break-keep leading-relaxed">
+        19↑ ?<br/><br/>
+      </p>
       <div class="flex gap-3 w-full mt-2">
         <button id="btn-age-no" class="flex-1 py-3 rounded-xl border border-border bg-muted/50 text-muted-foreground hover:text-foreground font-medium transition-colors">
           No
@@ -48,17 +50,15 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
     </div>
   </div>
 
-<!-- 📖 단행본 텍스트형 목차 컨테이너 -->
+  <!-- 📖 단행본 텍스트형 목차 컨테이너 -->
   <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
     
-    <!-- 상단 헤더 -->
     <header class="mb-16 text-center">
       <h1 class="text-4xl font-bold tracking-tight mb-4">Archive</h1>
-      <p class="text-muted-foreground">뭐라고쓸까</p>
+      <p class="text-muted-foreground">SF GL</p>
     </header>
 
-    <!-- 권별 아코디언 + 바둑판 챕터 레이아웃 -->
-    <div class="space-y-8 pb-24">
+    <div class="space-y-12 pb-24">
       {Object.entries(postsByVolume).map(([volString, posts], index) => {
         const volumeTitle = `Volume ${volString}`;
         
@@ -93,7 +93,6 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
               </ul>
             </div>
           </details>
-          </section>
         );
       })}
     </div>
@@ -108,31 +107,26 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
 
     if (!ageModal) return;
 
-    // 브라우저 캐시(로컬 스토리지)에 인증 기록이 있는지 확인
     const isAdult = localStorage.getItem('isAdultConfirmed');
     
     if (isAdult === 'true') {
-      // 이미 승인한 유저면 팝업을 아예 안 보여줌
       ageModal.style.display = 'none';
       document.body.style.overflow = 'auto';
     } else {
-      // 처음 온 유저면 팝업을 띄우고 배경 스크롤을 막음
       document.body.style.overflow = 'hidden';
     }
 
-    // [Yes] 버튼 클릭
     btnYes?.addEventListener('click', () => {
       localStorage.setItem('isAdultConfirmed', 'true');
-      ageModal.style.opacity = '0'; // 부드럽게 사라지는 효과
+      ageModal.style.opacity = '0';
       setTimeout(() => {
         ageModal.style.display = 'none';
-        document.body.style.overflow = 'auto'; // 스크롤 잠금 해제
+        document.body.style.overflow = 'auto';
       }, 300); 
     });
 
-    // [No] 버튼 클릭
     btnNo?.addEventListener('click', () => {
-      window.location.href = '/'; // 사이트 메인 홈으로 돌려보냄
+      window.location.href = '/'; 
     });
   });
 </script>
