@@ -9,7 +9,6 @@ export async function getStaticPaths() {
   const sortedPosts = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   return sortedPosts.map((post, index) => {
-    // Related posts
     const relatedPosts = sortedPosts
       .filter((other) => other.id !== post.id)
       .map((other) => ({
@@ -44,7 +43,6 @@ const { post, prevPost, nextPost, relatedPosts } = Astro.props;
 const { Content } = await render(post);
 const readingTime = getReadingTime(post.body ?? '');
 
-// Format date helper
 function formatDate(date: Date) {
   return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -53,7 +51,6 @@ function formatDate(date: Date) {
   });
 }
 
-// 👇 목차(사이드바)용 데이터 불러오기 (중복 에러 방지를 위해 변수명 tocPosts로 변경)
 const tocPosts = await getCollection('blog');
 const sortedTocPosts = tocPosts.sort((a, b) => {
   const volA = a.data.volume || 99;
@@ -73,7 +70,6 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
 }, {});
 ---
 
-
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
@@ -82,14 +78,12 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
   publishedTime={post.data.pubDate}
   author={post.data.author}
 >
-  <!-- 화면을 좌/우로 나누는 거대한 틀 -->
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 lg:gap-16 relative">
     
-    <!-- 👈 [왼쪽] 구글 문서 스타일 사이드바 -->
+    <!-- 좌측 구글 문서 스타일 목차 -->
     <aside class="w-full lg:w-56 flex-shrink-0 pt-12">
       <div class="sticky top-24">
         <div class="space-y-6 text-sm">
-          
           {Object.entries(postsByVolume).map(([volString, posts]) => {
             const isCurrentVolume = posts.some(p => p.id === post.id);
             const volumeTitle = posts[0]?.data.description || `${volString}권`;
@@ -115,12 +109,11 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
               </details>
             );
           })}
-
         </div>
       </div>
     </aside>
 
-    <!-- 👉 [오른쪽] 소설 본문 영역 -->
+    <!-- 우측 본문 영역 -->
     <article class="flex-1 min-w-0 pb-12">
       <div class="container max-w-3xl mx-auto pt-12 mb-8">
         <a href="/blog" class="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -206,11 +199,12 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
     </article>
   </div> 
 
-  <!-- 진행바, 리모컨 팝업, 엽서 기능 유지 -->
+  <!-- 상단 스크롤 진행바 -->
   <div class="fixed top-0 left-0 w-full h-1 z-50 bg-transparent pointer-events-none">
     <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150"></div>
   </div>
 
+  <!-- 우측 하단 리모컨 -->
   <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto">
     <div id="viewer-menu" class="hidden flex-col bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl p-4 w-[280px] gap-4 origin-bottom-right transition-all">
       <div class="flex items-center gap-4">
@@ -245,65 +239,45 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
     </button>
   </div>
 
-<button id="quote-tooltip" class="hidden absolute z-50 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full shadow-xl pointer-events-auto transition-opacity hover:scale-105">
-  📸 이미지로 공유
-</button>
-  
-<!-- 👇 [신규] 2. 미리보기 모달 창 (처인엔 숨겨져 있음) -->
-<div id="preview-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="bg-card border border-border rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col items-center gap-6 relative">
-    
-    <!-- 닫기 버튼 -->
-    <button id="modal-close" class="absolute top-4 right-4 text-muted-foreground hover:text-foreground text-xl font-bold">✕</button>
-    
-    <h3 class="font-bold text-lg text-foreground">발췌 카드 미리보기</h3>
+  <!-- 이미지 발췌 툴팁 및 미리보기 모달 -->
+  <button id="quote-tooltip" class="hidden absolute z-50 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full shadow-xl pointer-events-auto transition-opacity hover:scale-105">
+    📸 이미지로 공유
+  </button>
 
-    <!-- 엽서가 이미지로 변환되어 들어갈 자리 -->
-    <div id="preview-image-container" class="w-full rounded-xl overflow-hidden shadow-lg border border-border">
-      <!-- 자바스크립트가 여기에 생성된 이미지를 쏙 넣어줍니다 -->
-    </div>
-
-    <!-- 하단 버튼 그룹 -->
-    <div class="flex gap-3 w-full">
-      <button id="modal-cancel" class="flex-1 py-2.5 rounded-xl border border-border bg-muted/50 text-foreground font-medium hover:bg-muted transition-colors">
-        취소
-      </button>
-      <button id="modal-download" class="flex-1 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity">
-        저장하기 (PNG)
-      </button>
+  <div id="preview-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-border rounded-2xl max-w-lg w-full p-6 shadow-2xl flex flex-col items-center gap-6 relative">
+      <button id="modal-close" class="absolute top-4 right-4 text-muted-foreground hover:text-foreground text-xl font-bold">✕</button>
+      <h3 class="font-bold text-lg text-foreground">발췌 카드 미리보기</h3>
+      <div id="preview-image-container" class="w-full rounded-xl overflow-hidden shadow-lg border border-border"></div>
+      <div class="flex gap-3 w-full">
+        <button id="modal-cancel" class="flex-1 py-2.5 rounded-xl border border-border bg-muted/50 text-foreground font-medium hover:bg-muted transition-colors">취소</button>
+        <button id="modal-download" class="flex-1 py-2.5 rounded-xl bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity">저장하기 (PNG)</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- 👇 [신규] 3. 백그라운드에서 구워질 실제 엽서 원본 (화면 밖 안보이는 곳에 배치) -->
-<div id="export-container" class="fixed top-0 left-[-9999px] z-[-1] pointer-events-none">
-  <div id="export-card" class="w-[800px] h-[1000px] bg-[#0b0710] flex flex-col justify-between p-16 relative overflow-hidden">
-    <!-- 그리드 배경 -->
-    <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px); background-size: 50px 50px;"></div>
-    
-    <!-- 인용문 -->
-    <div class="flex-1 flex items-center justify-center z-10 my-auto">
-      <p id="export-text" class="text-[#f1f1f1] text-3xl leading-[1.8] break-keep text-center" style="font-family: 'MaruBuri-Regular', serif;"></p>
-    </div>
-
-    <!-- 하단 메타 데이터 -->
-    <div class="flex justify-between items-end border-t border-white/20 pt-8 z-10" style="font-family: 'Pretendard', sans-serif;">
-      <div class="text-white/80">
-        <div id="export-title" class="text-2xl font-bold mb-2">소설 제목</div>
-        <div class="text-lg text-white/60 mb-3">Vol. {post.data.volume || 1}</div>
-        <div class="text-sm tracking-wider text-white/50">By 42 (Mari)</div>
+  <div id="export-container" class="fixed top-0 left-[-9999px] z-[-1] pointer-events-none">
+    <div id="export-card" class="w-[800px] h-[1000px] bg-[#0b0710] flex flex-col justify-between p-16 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px); background-size: 50px 50px;"></div>
+      <div class="flex-1 flex items-center justify-center z-10 my-auto">
+        <p id="export-text" class="text-[#f1f1f1] text-3xl leading-[1.8] break-keep text-center" style="font-family: 'MaruBuri-Regular', serif;"></p>
       </div>
-      
-      <div class="flex items-center gap-4">
-        <div class="text-right">
-          <span class="block text-white/40 text-xs mb-1">SCAN TO READ</span>
-          <span class="block text-white/70 font-medium text-sm">your-domain.com</span>
+      <div class="flex justify-between items-end border-t border-white/20 pt-8 z-10" style="font-family: 'Pretendard', sans-serif;">
+        <div class="text-white/80">
+          <div id="export-title" class="text-2xl font-bold mb-2">소설 제목</div>
+          <div class="text-lg text-white/60 mb-3">Vol. {post.data.volume || 1}</div>
+          <div class="text-sm tracking-wider text-white/50">By 42 (Mari)</div>
         </div>
-        <canvas id="qr-canvas" class="w-20 h-20 bg-white p-1.5 rounded-lg"></canvas>
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <span class="block text-white/40 text-xs mb-1">SCAN TO READ</span>
+            <span class="block text-white/70 font-medium text-sm">your-domain.com</span>
+          </div>
+          <canvas id="qr-canvas" class="w-20 h-20 bg-white p-1.5 rounded-lg"></canvas>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </BaseLayout>
 
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -311,12 +285,10 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
 
 <script>
   document.addEventListener('astro:page-load', () => {
-    // 엽서 제목 가져오기
     const pageTitle = document.title.split('|')[0] || '단행본';
     const exportTitleEl = document.getElementById('export-title');
-    if (exportTitleEl) exportTitleEl.innerText = pageTitle;
+    if (exportTitleEl) exportTitleEl.innerText = pageTitle.trim();
 
-    // 1. 스크롤 진행바
     const progressBar = document.getElementById('progress-bar');
     window.addEventListener('scroll', () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -324,7 +296,6 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       if (height > 0 && progressBar) progressBar.style.width = (winScroll / height) * 100 + '%';
     });
 
-    // 2. 뷰어 리모컨 기능
     const btnToggle = document.getElementById('btn-remote-toggle');
     const menu = document.getElementById('viewer-menu');
     if(btnToggle) {
@@ -335,7 +306,8 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       const applySize = (size) => {
         savedSize = size;
         document.documentElement.style.setProperty('--viewer-size', `${size}rem`);
-        document.getElementById('text-size-display').innerText = `${Math.round((size / 1.05) * 100)}%`;
+        const display = document.getElementById('text-size-display');
+        if(display) display.innerText = `${Math.round((size / 1.05) * 100)}%`;
         localStorage.setItem('vSize', size);
       };
 
@@ -345,11 +317,12 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
         localStorage.setItem('vSpace', space);
         
         ['narrow', 'normal', 'wide'].forEach(type => {
-          document.getElementById(`btn-space-${type}`).classList.remove('bg-background', 'shadow-sm');
+          const btn = document.getElementById(`btn-space-${type}`);
+          if(btn) btn.classList.remove('bg-background', 'shadow-sm');
         });
-        if(space === 1.6) document.getElementById('btn-space-narrow').classList.add('bg-background', 'shadow-sm');
-        else if(space === 1.85) document.getElementById('btn-space-normal').classList.add('bg-background', 'shadow-sm');
-        else document.getElementById('btn-space-wide').classList.add('bg-background', 'shadow-sm');
+        if(space === 1.6) document.getElementById('btn-space-narrow')?.classList.add('bg-background', 'shadow-sm');
+        else if(space === 1.85) document.getElementById('btn-space-normal')?.classList.add('bg-background', 'shadow-sm');
+        else document.getElementById('btn-space-wide')?.classList.add('bg-background', 'shadow-sm');
       };
 
       const applyFont = (font) => {
@@ -358,11 +331,11 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
         localStorage.setItem('vFont', font);
         
         if(font.includes('MaruBuri')) {
-          document.getElementById('btn-font-serif').classList.add('bg-background', 'shadow-sm');
-          document.getElementById('btn-font-sans').classList.remove('bg-background', 'shadow-sm');
+          document.getElementById('btn-font-serif')?.classList.add('bg-background', 'shadow-sm');
+          document.getElementById('btn-font-sans')?.classList.remove('bg-background', 'shadow-sm');
         } else {
-          document.getElementById('btn-font-sans').classList.add('bg-background', 'shadow-sm');
-          document.getElementById('btn-font-serif').classList.remove('bg-background', 'shadow-sm');
+          document.getElementById('btn-font-sans')?.classList.add('bg-background', 'shadow-sm');
+          document.getElementById('btn-font-serif')?.classList.remove('bg-background', 'shadow-sm');
         }
       };
 
@@ -375,20 +348,19 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
         menu.classList.toggle('flex');
       });
       
-      document.getElementById('btn-text-plus').addEventListener('click', () => {
+      document.getElementById('btn-text-plus')?.addEventListener('click', () => {
         if (savedSize < 1.6) applySize(savedSize + 0.1);
       });
-      document.getElementById('btn-text-minus').addEventListener('click', () => {
+      document.getElementById('btn-text-minus')?.addEventListener('click', () => {
         if (savedSize > 0.8) applySize(savedSize - 0.1);
       });
-      document.getElementById('btn-space-narrow').addEventListener('click', () => applySpacing(1.6));
-      document.getElementById('btn-space-normal').addEventListener('click', () => applySpacing(1.85));
-      document.getElementById('btn-space-wide').addEventListener('click', () => applySpacing(2.2));
-      document.getElementById('btn-font-serif').addEventListener('click', () => applyFont("'MaruBuri-Regular', serif"));
-      document.getElementById('btn-font-sans').addEventListener('click', () => applyFont("'Pretendard', sans-serif"));
+      document.getElementById('btn-space-narrow')?.addEventListener('click', () => applySpacing(1.6));
+      document.getElementById('btn-space-normal')?.addEventListener('click', () => applySpacing(1.85));
+      document.getElementById('btn-space-wide')?.addEventListener('click', () => applySpacing(2.2));
+      document.getElementById('btn-font-serif')?.addEventListener('click', () => applyFont("'MaruBuri-Regular', serif"));
+      document.getElementById('btn-font-sans')?.addEventListener('click', () => applyFont("'Pretendard', sans-serif"));
     }
 
-    // 3. 드래그 발췌 기능
     const tooltip = document.getElementById('quote-tooltip');
     const modal = document.getElementById('preview-modal');
     const previewContainer = document.getElementById('preview-image-container');
@@ -406,24 +378,26 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       if (selectedText.length > 0) {
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
-        tooltip.style.top = `${rect.bottom + window.scrollY + 15}px`;
-        tooltip.style.left = `${rect.left + (rect.width / 2) - 60}px`; 
-        tooltip.classList.remove('hidden');
+        if(tooltip) {
+          tooltip.style.top = `${rect.bottom + window.scrollY + 15}px`;
+          tooltip.style.left = `${rect.left + (rect.width / 2) - 60}px`; 
+          tooltip.classList.remove('hidden');
+        }
       } else {
-        tooltip.classList.add('hidden');
+        tooltip?.classList.add('hidden');
       }
     });
 
-    // 툴팁 클릭 시 -> 엽서를 이미지로 구워서 모달(미리보기)에 띄우기
-    tooltip.addEventListener('click', async () => {
+    tooltip?.addEventListener('click', async () => {
+      if(!tooltip) return;
       tooltip.innerText = '⏳ 이미지 제작 중...';
       tooltip.classList.add('pointer-events-none');
 
       let displayText = selectedText;
       if (displayText.length > 150) displayText = displayText.substring(0, 150) + '...';
-      document.getElementById('export-text').innerText = displayText;
+      const exportTextEl = document.getElementById('export-text');
+      if(exportTextEl) exportTextEl.innerText = displayText;
 
-      // QR 코드 생성
       new QRious({
         element: document.getElementById('qr-canvas'),
         value: window.location.href,
@@ -434,7 +408,6 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
 
       try {
         const card = document.getElementById('export-card');
-        // html2canvas로 카드 캡처
         const canvas = await html2canvas(card, { 
           scale: 2, 
           useCORS: true, 
@@ -443,13 +416,12 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
         });
         
         generatedDataUrl = canvas.toDataURL('image/png');
-
-        // 미리보기 영역에 이미지 태그 삽입
-        previewContainer.innerHTML = `<img src="${generatedDataUrl}" alt="발췌 카드 미리보기" class="w-full h-auto rounded-lg shadow-inner" />`;
+        if(previewContainer) {
+          previewContainer.innerHTML = `<img src="${generatedDataUrl}" alt="발췌 카드 미리보기" class="w-full h-auto rounded-lg shadow-inner" />`;
+        }
         
-        // 모달 띄우기
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modal?.classList.remove('hidden');
+        modal?.classList.add('flex');
       } catch (err) {
         console.error('이미지 생성 실패:', err);
         alert('이미지 생성 중 오류가 발생했습니다.');
@@ -461,18 +433,16 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       }
     });
 
-    // 모달 닫기 및 취소 버튼 공통 함수
     const closeModal = () => {
-      modal.classList.remove('flex');
-      modal.classList.add('hidden');
-      previewContainer.innerHTML = '';
+      modal?.classList.remove('flex');
+      modal?.classList.add('hidden');
+      if(previewContainer) previewContainer.innerHTML = '';
     };
 
-    btnCancel.addEventListener('click', closeModal);
-    btnClose.addEventListener('click', closeModal);
+    btnCancel?.addEventListener('click', closeModal);
+    btnClose?.addEventListener('click', closeModal);
 
-    // 모달 안의 [저장하기] 버튼 누를 때 실제 다운로드 실행
-    btnDownload.addEventListener('click', () => {
+    btnDownload?.addEventListener('click', () => {
       if (!generatedDataUrl) return;
       const link = document.createElement('a');
       link.download = `quote_${Date.now()}.png`;
@@ -480,4 +450,5 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       link.click();
       closeModal();
     });
+  });
 </script>
