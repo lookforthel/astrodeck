@@ -86,7 +86,7 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
         <div class="space-y-6 text-sm">
           {Object.entries(postsByVolume).map(([volString, posts]) => {
             const isCurrentVolume = posts.some(p => p.id === post.id);
-            const volumeTitle = posts[0]?.data.description || `${volString}권`;
+            const volumeTitle = posts[0]?.data.description || `Volume ${volString}`;
             
             return (
               <details class="group" open={isCurrentVolume}>
@@ -266,7 +266,7 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
     <div class="max-w-md w-full mx-auto space-y-8 text-base">
       {Object.entries(postsByVolume).map(([volString, posts]) => {
         const isCurrentVolume = posts.some(p => p.id === post.id);
-        const volumeTitle = posts[0]?.data.description || `${volString}권`;
+        const volumeTitle = posts[0]?.data.description || `Volume ${volString}`;
         
         return (
           <details class="group" open={isCurrentVolume}>
