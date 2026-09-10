@@ -100,6 +100,7 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
 }, {});
 ---
 
+
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
@@ -108,33 +109,29 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
   publishedTime={post.data.pubDate}
   author={post.data.author}
 >
-  <!-- 👇 [신규] 화면을 좌/우로 나누는 거대한 틀 -->
+  <!-- 화면을 좌/우로 나누는 거대한 틀 -->
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 lg:gap-16 relative">
     
-    <!-- 👈 [왼쪽] 구글 문서 스타일 사이드바 (위계 강조) -->
+    <!-- 👈 [왼쪽] 구글 문서 스타일 사이드바 -->
     <aside class="w-full lg:w-56 flex-shrink-0 pt-12">
       <div class="sticky top-24">
         <div class="space-y-6 text-sm">
           
           {Object.entries(postsByVolume).map(([volString, posts]) => {
             const isCurrentVolume = posts.some(p => p.id === post.id);
-            // 디스크립션에 적어둔 "[GL] 머지 컨플릭트 1"을 폴더명으로 불러옵니다
             const volumeTitle = posts[0]?.data.description || `${volString}권`;
             
             return (
               <details class="group" open={isCurrentVolume}>
-                <!-- 1계층: 굵은 글씨의 폴더명 -->
                 <summary class="font-bold text-foreground cursor-pointer list-none select-none text-base mb-3 hover:text-primary transition-colors">
                   {volumeTitle}
                 </summary>
                 
-                <!-- 2계층: 얇은 세로선과 들여쓰기된 챕터 목록 -->
                 <ul class="space-y-3 text-muted-foreground border-l-[1.5px] border-border/60 ml-1 pl-4">
                   {posts.map((p) => {
                     const isCurrent = p.id === post.id;
                     return (
                       <li class={`${isCurrent ? 'text-primary font-bold' : 'hover:text-foreground transition-colors'}`}>
-                        <!-- 글 제목(1. 포획, 2. 수리 등)을 불러옵니다 -->
                         <a href={`/blog/${p.id}`} class="block py-0.5">
                           {p.data.title}
                         </a>
@@ -150,14 +147,14 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       </div>
     </aside>
 
-    <!-- 👉 [오른쪽] 작가님의 기존 본문 영역 (클래스에 flex-1 추가) -->
+    <!-- 👉 [오른쪽] 소설 본문 영역 -->
     <article class="flex-1 min-w-0 pb-12">
       <div class="container max-w-3xl mx-auto pt-12 mb-8">
         <a href="/blog" class="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
             <path d="m15 18-6-6 6-6"></path>
           </svg>
-          Back to Blog
+          목록으로
         </a>
       </div>
 
@@ -170,12 +167,12 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
               {formatDate(post.data.pubDate)}
             </time>
             <span>•</span>
-            <span>{post.data.author}</span>
+            <span>{post.data.author || '42 (Mari)'}</span>
             <span>•</span>
             <span>{readingTime.text}</span>
           </div>
           {
-            post.data.tags.length > 0 && (
+            post.data.tags?.length > 0 && (
               <div class="flex flex-wrap gap-2 pt-2">
                 {post.data.tags.map((tag) => (
                   <a href={`/tags/${tag}`} class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
@@ -194,16 +191,13 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
         </div>
 
         {
-          relatedPosts.length > 0 && (
+          relatedPosts?.length > 0 && (
             <aside class="mt-16 pt-8 border-t" aria-labelledby="related-heading">
-              <h2 id="related-heading" class="text-xl font-bold tracking-tight mb-6">Related posts</h2>
+              <h2 id="related-heading" class="text-xl font-bold tracking-tight mb-6">관련 에피소드</h2>
               <ul class="grid gap-4 sm:grid-cols-3">
                 {relatedPosts.map((related) => (
                   <li>
                     <a href={`/blog/${related.id}`} class="group block h-full rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/50">
-                      <time datetime={related.data.pubDate.toISOString()} class="text-xs text-muted-foreground">
-                        {formatDate(related.data.pubDate)}
-                      </time>
                       <span class="mt-2 block text-sm font-medium leading-snug group-hover:text-primary transition-colors">
                         {related.data.title}
                       </span>
@@ -220,29 +214,15 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
             {
               prevPost ? (
                 <a href={`/blog/${prevPost.id}`} class="group flex-1 text-left">
-                  <div class="text-xs text-muted-foreground mb-1">Previous</div>
+                  <div class="text-xs text-muted-foreground mb-1">이전 화</div>
                   <div class="text-sm font-medium group-hover:text-primary transition-colors">{prevPost.data.title}</div>
                 </a>
               ) : <div class="flex-1" />
             }
-            <a href="/blog" class="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                <rect width="3" height="3" x="3" y="3" rx="1"></rect>
-                <rect width="3" height="3" x="10" y="3" rx="1"></rect>
-                <rect width="3" height="3" x="17" y="3" rx="1"></rect>
-                <rect width="3" height="3" x="3" y="10" rx="1"></rect>
-                <rect width="3" height="3" x="10" y="10" rx="1"></rect>
-                <rect width="3" height="3" x="17" y="10" rx="1"></rect>
-                <rect width="3" height="3" x="3" y="17" rx="1"></rect>
-                <rect width="3" height="3" x="10" y="17" rx="1"></rect>
-                <rect width="3" height="3" x="17" y="17" rx="1"></rect>
-              </svg>
-              All posts
-            </a>
             {
               nextPost ? (
                 <a href={`/blog/${nextPost.id}`} class="group flex-1 text-right">
-                  <div class="text-xs text-muted-foreground mb-1">Next</div>
+                  <div class="text-xs text-muted-foreground mb-1">다음 화</div>
                   <div class="text-sm font-medium group-hover:text-primary transition-colors">{nextPost.data.title}</div>
                 </a>
               ) : <div class="flex-1" />
@@ -251,9 +231,9 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
         </footer>
       </div>
     </article>
-  </div> <!-- 👈 거대한 틀 닫기 -->
+  </div> 
 
-  <!-- 👇 (기존 유지) 진행바, 뷰어 메뉴, 이미지 발췌 코드 -->
+  <!-- 진행바, 리모컨 팝업, 엽서 기능 유지 -->
   <div class="fixed top-0 left-0 w-full h-1 z-50 bg-transparent pointer-events-none">
     <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150"></div>
   </div>
@@ -295,6 +275,7 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
   <button id="quote-tooltip" class="hidden absolute z-50 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full shadow-xl pointer-events-auto transition-opacity hover:scale-105">
     📸 이미지로 공유
   </button>
+  
   <div id="export-container" class="fixed top-0 left-[-9999px] z-[-1]">
     <div id="export-card" class="w-[1080px] h-[1350px] bg-[#0b0710] flex flex-col justify-between p-24 relative overflow-hidden">
       <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px); background-size: 60px 60px;"></div>
@@ -305,7 +286,7 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       </div>
       <div class="flex justify-between items-end border-t border-white/20 pt-10 z-10" style="font-family: 'Pretendard', sans-serif;">
         <div class="text-white/80">
-          <div class="text-3xl font-bold mb-3">{post.data.title}</div>
+          <div id="export-title" class="text-3xl font-bold mb-3">소설 제목</div>
           <div class="text-2xl text-white/60 mb-5">Vol. {post.data.volume || 1}</div>
           <div class="text-xl tracking-wider text-white/50">By 42 (Mari)</div>
         </div>
@@ -321,12 +302,16 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
   </div>
 </BaseLayout>
 
-<!-- 이미지 캡처 & QR 코드 생성 라이브러리 (Astro 에러 방지용 is:inline 추가!) -->
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
 <script>
   document.addEventListener('astro:page-load', () => {
+    // 엽서 제목 가져오기
+    const pageTitle = document.title.split('|')[0] || '단행본';
+    const exportTitleEl = document.getElementById('export-title');
+    if (exportTitleEl) exportTitleEl.innerText = pageTitle;
+
     // 1. 스크롤 진행바
     const progressBar = document.getElementById('progress-bar');
     window.addEventListener('scroll', () => {
@@ -338,81 +323,71 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
     // 2. 뷰어 리모컨 기능
     const btnToggle = document.getElementById('btn-remote-toggle');
     const menu = document.getElementById('viewer-menu');
-    if(!btnToggle) return; 
+    if(btnToggle) {
+      let savedSize = parseFloat(localStorage.getItem('vSize')) || 1.05;
+      let savedSpacing = parseFloat(localStorage.getItem('vSpace')) || 1.85;
+      let savedFont = localStorage.getItem('vFont') || "'MaruBuri-Regular', serif";
 
-    // 저장된 설정 불러오기 (없으면 기본값)
-    let savedSize = parseFloat(localStorage.getItem('vSize')) || 1.05;
-    let savedSpacing = parseFloat(localStorage.getItem('vSpace')) || 1.85;
-    let savedFont = localStorage.getItem('vFont') || "'MaruBuri-Regular', serif";
+      const applySize = (size) => {
+        savedSize = size;
+        document.documentElement.style.setProperty('--viewer-size', `${size}rem`);
+        document.getElementById('text-size-display').innerText = `${Math.round((size / 1.05) * 100)}%`;
+        localStorage.setItem('vSize', size);
+      };
 
-    // 글자 크기 적용 함수
-    const applySize = (size) => {
-      savedSize = size;
-      document.documentElement.style.setProperty('--viewer-size', `${size}rem`);
-      document.getElementById('text-size-display').innerText = `${Math.round((size / 1.05) * 100)}%`;
-      localStorage.setItem('vSize', size);
-    };
+      const applySpacing = (space) => {
+        savedSpacing = space;
+        document.documentElement.style.setProperty('--viewer-spacing', space);
+        localStorage.setItem('vSpace', space);
+        
+        ['narrow', 'normal', 'wide'].forEach(type => {
+          document.getElementById(`btn-space-${type}`).classList.remove('bg-background', 'shadow-sm');
+        });
+        if(space === 1.6) document.getElementById('btn-space-narrow').classList.add('bg-background', 'shadow-sm');
+        else if(space === 1.85) document.getElementById('btn-space-normal').classList.add('bg-background', 'shadow-sm');
+        else document.getElementById('btn-space-wide').classList.add('bg-background', 'shadow-sm');
+      };
 
-    // 줄 간격 적용 함수
-    const applySpacing = (space) => {
-      savedSpacing = space;
-      document.documentElement.style.setProperty('--viewer-spacing', space);
-      localStorage.setItem('vSpace', space);
-      
-      // 버튼 스타일 업데이트
-      ['narrow', 'normal', 'wide'].forEach(type => {
-        document.getElementById(`btn-space-${type}`).classList.remove('bg-background', 'shadow-sm');
+      const applyFont = (font) => {
+        savedFont = font;
+        document.documentElement.style.setProperty('--viewer-font', font);
+        localStorage.setItem('vFont', font);
+        
+        if(font.includes('MaruBuri')) {
+          document.getElementById('btn-font-serif').classList.add('bg-background', 'shadow-sm');
+          document.getElementById('btn-font-sans').classList.remove('bg-background', 'shadow-sm');
+        } else {
+          document.getElementById('btn-font-sans').classList.add('bg-background', 'shadow-sm');
+          document.getElementById('btn-font-serif').classList.remove('bg-background', 'shadow-sm');
+        }
+      };
+
+      applySize(savedSize);
+      applySpacing(savedSpacing);
+      applyFont(savedFont);
+
+      btnToggle.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
       });
-      if(space === 1.6) document.getElementById('btn-space-narrow').classList.add('bg-background', 'shadow-sm');
-      else if(space === 1.85) document.getElementById('btn-space-normal').classList.add('bg-background', 'shadow-sm');
-      else document.getElementById('btn-space-wide').classList.add('bg-background', 'shadow-sm');
-    };
-
-    // 글꼴 적용 함수
-    const applyFont = (font) => {
-      savedFont = font;
-      document.documentElement.style.setProperty('--viewer-font', font);
-      localStorage.setItem('vFont', font);
       
-      if(font.includes('MaruBuri')) {
-        document.getElementById('btn-font-serif').classList.add('bg-background', 'shadow-sm');
-        document.getElementById('btn-font-sans').classList.remove('bg-background', 'shadow-sm');
-      } else {
-        document.getElementById('btn-font-sans').classList.add('bg-background', 'shadow-sm');
-        document.getElementById('btn-font-serif').classList.remove('bg-background', 'shadow-sm');
-      }
-    };
+      document.getElementById('btn-text-plus').addEventListener('click', () => {
+        if (savedSize < 1.6) applySize(savedSize + 0.1);
+      });
+      document.getElementById('btn-text-minus').addEventListener('click', () => {
+        if (savedSize > 0.8) applySize(savedSize - 0.1);
+      });
+      document.getElementById('btn-space-narrow').addEventListener('click', () => applySpacing(1.6));
+      document.getElementById('btn-space-normal').addEventListener('click', () => applySpacing(1.85));
+      document.getElementById('btn-space-wide').addEventListener('click', () => applySpacing(2.2));
+      document.getElementById('btn-font-serif').addEventListener('click', () => applyFont("'MaruBuri-Regular', serif"));
+      document.getElementById('btn-font-sans').addEventListener('click', () => applyFont("'Pretendard', sans-serif"));
+    }
 
-    // 페이지 켜질 때 저장된 설정 바로 입히기
-    applySize(savedSize);
-    applySpacing(savedSpacing);
-    applyFont(savedFont);
-
-    // 클릭 이벤트 연결
-    btnToggle.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
-      menu.classList.toggle('flex');
-    });
-    
-    document.getElementById('btn-text-plus').addEventListener('click', () => {
-      if (savedSize < 1.6) applySize(savedSize + 0.1);
-    });
-    document.getElementById('btn-text-minus').addEventListener('click', () => {
-      if (savedSize > 0.8) applySize(savedSize - 0.1);
-    });
-    
-    document.getElementById('btn-space-narrow').addEventListener('click', () => applySpacing(1.6));
-    document.getElementById('btn-space-normal').addEventListener('click', () => applySpacing(1.85));
-    document.getElementById('btn-space-wide').addEventListener('click', () => applySpacing(2.2));
-    
-    document.getElementById('btn-font-serif').addEventListener('click', () => applyFont("'MaruBuri-Regular', serif"));
-    document.getElementById('btn-font-sans').addEventListener('click', () => applyFont("'Pretendard', sans-serif"));
-  });
-// 👇 (신규) 3. 드래그 발췌 기능
+    // 3. 드래그 발췌 기능
     const tooltip = document.getElementById('quote-tooltip');
     let selectedText = '';
 
-    // 글을 드래그하면 툴팁을 마우스 아래에 띄움
     document.addEventListener('selectionchange', () => {
       const selection = window.getSelection();
       selectedText = selection.toString().trim();
@@ -420,8 +395,6 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       if (selectedText.length > 0) {
         const range = selection.getRangeAt(0);
         const rect = range.getBoundingClientRect();
-        
-        // 툴팁 위치 계산 (드래그한 영역의 중앙 아래쪽)
         tooltip.style.top = `${rect.bottom + window.scrollY + 15}px`;
         tooltip.style.left = `${rect.left + (rect.width / 2) - 60}px`; 
         tooltip.classList.remove('hidden');
@@ -430,25 +403,21 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       }
     });
 
-    // 툴팁 클릭 시 이미지 굽기 시작
     tooltip.addEventListener('click', async () => {
       tooltip.innerText = '⏳ 생성 중...';
       
-      // 1. 텍스트 길이가 150자가 넘으면 말줄임표 처리 (디자인 보호)
       let displayText = selectedText;
       if (displayText.length > 150) displayText = displayText.substring(0, 150) + '...';
       document.getElementById('export-text').innerText = displayText;
 
-      // 2. QR 코드 즉석 생성
       new QRious({
         element: document.getElementById('qr-canvas'),
-        value: 'https://your-domain.com', // 👈 이 QR을 찍었을 때 연결될 주소!
+        value: window.location.href, // 👈 QR을 찍으면 현재 읽고 있는 글로 바로 이동합니다!
         size: 200,
         background: '#ffffff',
         foreground: '#000000'
       });
 
-      // 3. 엽서 HTML을 통째로 이미지(PNG)로 변환 후 다운로드
       const card = document.getElementById('export-card');
       const canvas = await html2canvas(card, { scale: 1.5, useCORS: true });
       
@@ -457,9 +426,8 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       link.href = canvas.toDataURL('image/png');
       link.click();
 
-      // 완료 후 툴팁 원상복구
       tooltip.innerText = '📸 이미지로 공유';
-      window.getSelection().removeAllRanges(); // 드래그 해제
+      window.getSelection().removeAllRanges();
       tooltip.classList.add('hidden');
     });
   });
