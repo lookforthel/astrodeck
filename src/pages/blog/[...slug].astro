@@ -14,7 +14,7 @@ export async function getStaticPaths() {
       .filter((other) => other.id !== post.id)
       .map((other) => ({
         post: other,
-        shared: other.data.tags.filter((tag) => post.data.tags.includes(tag)).length,
+        shared: (other.data.tags || []).filter((tag) => (post.data.tags || []).includes(tag)).length,
       }))
       .filter(({ shared }) => shared > 0)
       .sort((a, b) => b.shared - a.shared)
@@ -52,6 +52,25 @@ function formatDate(date: Date) {
     day: 'numeric',
   });
 }
+
+// 👇 [신규] 사이드바 목차용 데이터 가져오기 및 정렬
+const allPosts = await getCollection('blog');
+const sortedTocPosts = allPosts.sort((a, b) => {
+  const volA = a.data.volume || 99;
+  const volB = b.data.volume || 99;
+  if (volA !== volB) return volA - volB;
+  
+  const chapA = a.data.chapter || 99;
+  const chapB = b.data.chapter || 99;
+  return chapA - chapB;
+});
+
+const postsByVolume = sortedTocPosts.reduce((acc, p) => {
+  const vol = p.data.volume || 99;
+  if (!acc[vol]) acc[vol] = [];
+  acc[vol].push(p);
+  return acc;
+}, {});
 ---
 
 <BaseLayout
