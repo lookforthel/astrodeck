@@ -38,89 +38,45 @@ const containerClass =
   variant === 'fullWidth' ? 'w-full px-4' : 'container max-w-5xl mx-auto px-4 sm:px-6';
 ---
 
-<footer class="border-t bg-background">
-  <div class:list={[containerClass, 'py-12']}>
-    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
-      <!-- Brand -->
-      <div class="col-span-2 md:col-span-1">
-        <Logo />
-        <p class="mt-4 text-sm text-muted-foreground">
-          Open-source Astro.js starter kit with ready-to-use components. Start building faster.
-        </p>
-      </div>
+<footer class="py-12 border-t border-border/40 mt-auto bg-card/10">
+  <div class="container mx-auto max-w-4xl px-4 flex flex-col items-center gap-8">
 
-      <!-- AstroDeck -->
-      <div>
-        <h3 class="font-semibold mb-4">AstroDeck</h3>
-        <ul class="space-y-0">
-          {
-            footerLinks.astrodeck.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class="inline-block py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <!-- Pages -->
-      <div>
-        <h3 class="font-semibold mb-4">Pages</h3>
-        <ul class="space-y-0">
-          {
-            footerLinks.pages.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  class="inline-block py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      <!-- Creator -->
-      <div>
-        <h3 class="font-semibold mb-4">Creator</h3>
-        <p class="text-sm text-muted-foreground">Created by Holger Könemann</p>
-        <p class="text-sm text-muted-foreground mt-1">
-          for <a
-            href="https://templatedeck.com"
-            class="font-medium text-foreground hover:text-primary transition-colors inline-flex items-center gap-1 py-1"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            templatedeck.com
-            <svg
-              class="h-3 w-3"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              ></path>
-            </svg>
-          </a>
-        </p>
-      </div>
+    <!-- 1. 이웃/지인 배너 영역 (88x31 사이즈 추천) -->
+    <div class="flex flex-wrap justify-center gap-3 opacity-70 hover:opacity-100 transition-opacity">
+      <!-- 배너 이미지를 구해서 href와 src를 수정하세요 -->
+      <a href="#" target="_blank" class="hover:scale-105 transition-transform">
+        <img src="https://via.placeholder.com/88x31/14101f/e2e8f0?text=LINK+01" alt="배너 1" class="w-[88px] h-[31px] rounded-[2px] border border-border/50" />
+      </a>
+      <a href="#" target="_blank" class="hover:scale-105 transition-transform">
+        <img src="https://via.placeholder.com/88x31/14101f/e2e8f0?text=LINK+02" alt="배너 2" class="w-[88px] h-[31px] rounded-[2px] border border-border/50" />
+      </a>
     </div>
 
-    <!-- Copyright -->
-    <div class="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-      <p>&copy; {new Date().getFullYear()} AstroDeck. MIT License. Open Source.</p>
+    <!-- 2. 외부 링크 & 방문자 카운터 -->
+    <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 text-sm text-muted-foreground font-mono">
+      
+      <!-- 플랫폼 링크 -->
+      <div class="flex items-center gap-4">
+        <a href="https://www.postype.com/@fishstew?utm_source=link&utm_medium=social&utm_content=if_sh_wl&utm_campaign=channel" target="_blank" class="hover:text-primary transition-colors">POSTYPE</a>
+        <span class="text-border">/</span>
+        <a href="https://tobe.aladin.co.kr/t/joonggae" target="_blank" class="hover:text-primary transition-colors">TOBE</a>
+      </div>
+
+      <span class="hidden sm:inline text-border">|</span>
+
+      <!-- 방문자 카운터 (hits.seeyoufarm.com 무료 위젯) -->
+      <div class="flex items-center gap-2" title="누적 방문자 수">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fmergeconflict.site&count_bg=%2300000000&title_bg=%2300000000&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=true" alt="Hits" class="h-5 opacity-80" />
+      </div>
+
     </div>
+
+    <!-- 3. 카피라이트 -->
+    <div class="text-xs text-muted-foreground/50 text-center font-sans">
+      <p>&copy; 2026 42 (Mari). All rights reserved.</p>
+      <p class="mt-1 opacity-80">Hard SF GL Novel &lt;Merge Conflict&gt;</p>
+    </div>
+
   </div>
 </footer>
