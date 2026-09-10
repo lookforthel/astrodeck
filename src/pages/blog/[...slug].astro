@@ -221,38 +221,38 @@ function formatDate(date: Date) {
     <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150"></div>
   </div>
 <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto">
-    <!-- 통합 컨트롤 패널 (기본 숨김) -->
-    <div id="viewer-menu" class="hidden flex-col bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl p-4 w-64 gap-4 origin-bottom-right transition-all">
-      
-      <!-- 1. 글꼴 선택 -->
-      <div class="flex items-center justify-between">
-        <span class="text-sm font-medium text-muted-foreground">글꼴</span>
-        <div class="flex bg-muted rounded-lg p-1">
-          <button id="btn-font-serif" class="px-3 py-1 text-sm rounded-md bg-background shadow-sm transition-all">명조</button>
-          <button id="btn-font-sans" class="px-3 py-1 text-sm rounded-md hover:bg-background/50 transition-all">고딕</button>
-        </div>
-      </div>
-
-      <!-- 2. 글자 크기 -->
-      <div class="flex items-center justify-between">
-        <span class="text-sm font-medium text-muted-foreground">크기</span>
-        <div class="flex items-center bg-muted rounded-lg p-1">
-          <button id="btn-text-minus" class="px-3 py-1 hover:bg-background/50 rounded-md transition-all">A-</button>
-          <span id="text-size-display" class="text-xs font-medium w-12 text-center">100%</span>
-          <button id="btn-text-plus" class="px-3 py-1 hover:bg-background/50 rounded-md transition-all">A+</button>
-        </div>
-      </div>
-
-      <!-- 3. 줄 간격 -->
-      <div class="flex items-center justify-between">
-        <span class="text-sm font-medium text-muted-foreground">간격</span>
-        <div class="flex bg-muted rounded-lg p-1 gap-1">
-          <button id="btn-space-narrow" class="px-2 py-1 text-xs rounded-md hover:bg-background/50 transition-all">좁게</button>
-          <button id="btn-space-normal" class="px-2 py-1 text-xs rounded-md bg-background shadow-sm transition-all">보통</button>
-          <button id="btn-space-wide" class="px-2 py-1 text-xs rounded-md hover:bg-background/50 transition-all">넓게</button>
-        </div>
-      </div>
+    <!-- 통합 컨트롤 패널 -->
+<div id="viewer-menu" class="hidden flex-col bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl p-4 w-[280px] gap-4 origin-bottom-right transition-all">
+  
+  <!-- 1. 글꼴 선택 -->
+  <div class="flex items-center gap-4">
+    <span class="text-sm font-medium text-muted-foreground w-8">글꼴</span>
+    <div class="flex flex-1 bg-muted rounded-lg p-1 text-sm font-medium">
+      <button id="btn-font-serif" class="flex-1 py-1.5 rounded-md bg-background shadow-sm transition-all">명조</button>
+      <button id="btn-font-sans" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">고딕</button>
     </div>
+  </div>
+
+  <!-- 2. 글자 크기 -->
+  <div class="flex items-center gap-4">
+    <span class="text-sm font-medium text-muted-foreground w-8">크기</span>
+    <div class="flex flex-1 items-center bg-muted rounded-lg p-1 text-sm font-medium">
+      <button id="btn-text-minus" class="flex-1 py-1.5 hover:bg-background/50 rounded-md transition-all">-</button>
+      <span id="text-size-display" class="w-14 text-center">100%</span>
+      <button id="btn-text-plus" class="flex-1 py-1.5 hover:bg-background/50 rounded-md transition-all">+</button>
+    </div>
+  </div>
+
+  <!-- 3. 줄 간격 -->
+  <div class="flex items-center gap-4">
+    <span class="text-sm font-medium text-muted-foreground w-8">간격</span>
+    <div class="flex flex-1 bg-muted rounded-lg p-1 text-sm font-medium">
+      <button id="btn-space-narrow" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">좁게</button>
+      <button id="btn-space-normal" class="flex-1 py-1.5 rounded-md bg-background shadow-sm transition-all">보통</button>
+      <button id="btn-space-wide" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">넓게</button>
+    </div>
+  </div>
+</div>
 
     <!-- 톱니바퀴 토글 버튼 (마우스 올리면 선명해짐) -->
     <button id="btn-remote-toggle" class="p-3 bg-card/80 backdrop-blur border border-border rounded-full shadow-lg opacity-70 hover:opacity-100 hover:border-primary/50 transition-all group">
