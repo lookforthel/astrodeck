@@ -255,29 +255,29 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
     </button>
   </div>
 
-  <!-- 모바일 목차: 박스 없이 어두운 배경 위에 반투명하게 띄우는 오버레이 -->
-  <div id="mobile-toc-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col p-8 overflow-y-auto">
+ <!-- 목차 팝업 -->
+  <div id="mobile-toc-modal" class="hidden fixed inset-0 z-50 bg-background/90 backdrop-blur-md flex flex-col p-8 overflow-y-auto transition-colors">
     <!-- 우측 상단 X 닫기 버튼 -->
     <div class="flex justify-end mb-6">
-      <button id="mobile-toc-close" class="text-white/60 hover:text-white text-3xl font-light px-2">✕</button>
+      <button id="mobile-toc-close" class="text-muted-foreground hover:text-foreground text-3xl font-light px-2 transition-colors">✕</button>
     </div>
     
-    <!-- 목차 본문 영역 (가운데 정렬 또는 깔끔한 정돈) -->
+    <!-- 목차 본문 영역 -->
     <div class="max-w-md w-full mx-auto space-y-8 text-base">
       {Object.entries(postsByVolume).map(([volString, posts]) => {
         const isCurrentVolume = posts.some(p => p.id === post.id);
-        const volumeTitle = posts[0]?.data.description || `Volume ${volString}`;
+        const volumeTitle = `Volume ${volString}`;
         
         return (
           <details class="group" open={isCurrentVolume}>
-            <summary class="font-bold text-white/90 cursor-pointer list-none select-none text-lg mb-4 tracking-wide">
+            <summary class="font-bold text-foreground cursor-pointer list-none select-none text-lg mb-4 tracking-wide transition-colors">
               {volumeTitle}
             </summary>
-            <ul class="space-y-3 text-white/50 border-l border-white/20 ml-2 pl-4">
+            <ul class="space-y-3 text-muted-foreground border-l-[1.5px] border-border/60 ml-2 pl-4">
               {posts.map((p) => {
                 const isCurrent = p.id === post.id;
                 return (
-                  <li class={`${isCurrent ? 'text-primary font-bold text-lg' : 'hover:text-white/90 transition-colors'}`}>
+                  <li class={`${isCurrent ? 'text-primary font-bold text-lg' : 'hover:text-foreground transition-colors'}`}>
                     <a href={`/blog/${p.id}`} class="block py-1">{p.data.title}</a>
                   </li>
                 );
