@@ -413,3 +413,19 @@ html:not(.dark):not([data-theme="dark"]) body::before {
     linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
   background-size: 40px 40px; 
 }
+
+/* ========================================================
+   소설 본문 구분선 (***) 커스텀 디자인
+======================================================== */
+.novel-text hr {
+  border: none !important; /* 기본 실선 숨기기 */
+  text-align: center !important;
+  margin: 4rem 0 !important; /* 위아래 여백 넉넉하게 */
+}
+
+.novel-text hr::before {
+  content: '⚙    ⚙    ⚙'; /* 👈 원하시는 기호로 언제든 수정하세요! */
+  color: #6b7280 !important; /* 약간 어두운 회색 */
+  font-size: 1.1rem !important;
+  letter-spacing: 0.5em; /* 기호 사이 간격 넓게 */
+}
