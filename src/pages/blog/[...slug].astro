@@ -9,7 +9,7 @@ export async function getStaticPaths() {
   const sortedPosts = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
   return sortedPosts.map((post, index) => {
-    // Related posts: most shared tags first, newest first on ties, max 3
+    // Related posts
     const relatedPosts = sortedPosts
       .filter((other) => other.id !== post.id)
       .map((other) => ({
@@ -53,36 +53,9 @@ function formatDate(date: Date) {
   });
 }
 
-// 👇 [신규] 사이드바 목차용 데이터 가져오기 및 정렬
-const allPosts = await getCollection('blog');
-const sortedTocPosts = allPosts.sort((a, b) => {
-  const volA = a.data.volume || 99;
-  const volB = b.data.volume || 99;
-  if (volA !== volB) return volA - volB;
-  
-  const chapA = a.data.chapter || 99;
-  const chapB = b.data.chapter || 99;
-  return chapA - chapB;
-});
-
-const postsByVolume = sortedTocPosts.reduce((acc, p) => {
-  const vol = p.data.volume || 99;
-  if (!acc[vol]) acc[vol] = [];
-  acc[vol].push(p);
-  return acc;
-}, {});
-
-// Format date helper
-function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
-
-const allPosts = await getCollection('blog');
-const sortedTocPosts = allPosts.sort((a, b) => {
+// 👇 목차(사이드바)용 데이터 불러오기 (중복 에러 방지를 위해 변수명 tocPosts로 변경)
+const tocPosts = await getCollection('blog');
+const sortedTocPosts = tocPosts.sort((a, b) => {
   const volA = a.data.volume || 99;
   const volB = b.data.volume || 99;
   if (volA !== volB) return volA - volB;
