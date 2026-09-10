@@ -39,17 +39,17 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
       <h2 class="text-xl font-bold text-foreground">19 ↑?</h2>
       <div class="flex gap-3 w-full mt-2">
         <button id="btn-age-no" class="flex-1 py-3 rounded-xl border border-border bg-muted/50 text-muted-foreground hover:text-foreground font-medium transition-colors">
-          나가기
+          No
         </button>
         <button id="btn-age-yes" class="flex-1 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity">
-          열람 승인
+          Yes
         </button>
       </div>
     </div>
   </div>
 
-  <!-- 📖 단행본 목차 컨테이너 -->
-  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
+<!-- 📖 단행본 텍스트형 목차 컨테이너 -->
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
     
     <!-- 상단 헤더 -->
     <header class="mb-16 text-center">
@@ -63,34 +63,36 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
         const volumeTitle = `Volume ${volString}`;
         
         return (
-          <section class="border border-border/50 bg-card/30 rounded-2xl overflow-hidden shadow-sm">
-            {/* index === 0 이면 첫 번째 권(Volume 1)은 기본으로 펼쳐놓습니다. */}
-            <details class="group" open={index === 0}>
-              <summary class="flex items-center justify-between p-6 cursor-pointer bg-card hover:bg-muted/30 transition-colors select-none">
-                <h2 class="text-2xl font-bold tracking-wide">{volumeTitle}</h2>
-                <span class="text-muted-foreground transition-transform duration-300 group-open:rotate-180">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </span>
-              </summary>
-              
-              <div class="p-6 pt-2 border-t border-border/50">
-                <!-- PC에서는 3칸, 태블릿은 2칸, 모바일은 1칸으로 자동 배치되는 그리드 -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {posts.map((post) => (
-                    <a href={`/blog/${post.id}`} class="flex flex-col p-4 rounded-xl border border-border/50 bg-background hover:border-primary/50 hover:bg-card transition-all group shadow-sm">
-                      <span class="text-xs text-primary font-medium mb-1">
-                        Chapter {post.data.chapter}
+          <details class="group" open={index === 0}>
+            {/* 권별 타이틀: 굵은 선으로 미니멀하게 영역만 분리 */}
+            <summary class="flex items-center justify-between pb-4 border-b-2 border-border/80 cursor-pointer select-none">
+              <h2 class="text-2xl font-bold tracking-wide text-foreground group-hover:text-primary transition-colors">{volumeTitle}</h2>
+              <span class="text-muted-foreground transition-transform duration-300 group-open:rotate-180">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </summary>
+            
+            {/* 챕터 리스트: 박스를 없애고 밑줄 텍스트 형식으로 변경 */}
+            <div class="pt-2">
+              <ul class="flex flex-col">
+                {posts.map((post) => (
+                  <li>
+                    {/* py-4 px-2로 보이지 않는 터치 영역을 위아래로 넓게 확보! */}
+                    <a href={`/blog/${post.id}`} class="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 py-4 px-2 border-b border-border/40 hover:bg-muted/30 transition-colors w-full rounded-md">
+                      <span class="text-sm font-mono text-primary/80 shrink-0">
+                        Ch. {post.data.chapter?.toString().padStart(2, '0') || '00'}
                       </span>
-                      <span class="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                      <span class="text-lg font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                         {post.data.title}
                       </span>
                     </a>
-                  ))}
-                </div>
-              </div>
-            </details>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
           </section>
         );
       })}
@@ -118,7 +120,7 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
       document.body.style.overflow = 'hidden';
     }
 
-    // [열람 승인] 버튼 클릭
+    // [Yes] 버튼 클릭
     btnYes?.addEventListener('click', () => {
       localStorage.setItem('isAdultConfirmed', 'true');
       ageModal.style.opacity = '0'; // 부드럽게 사라지는 효과
@@ -128,7 +130,7 @@ const postsByVolume = sortedPosts.reduce((acc, p) => {
       }, 300); 
     });
 
-    // [나가기] 버튼 클릭
+    // [No] 버튼 클릭
     btnNo?.addEventListener('click', () => {
       window.location.href = '/'; // 사이트 메인 홈으로 돌려보냄
     });
