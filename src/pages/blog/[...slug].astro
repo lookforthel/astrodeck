@@ -71,6 +71,33 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
   acc[vol].push(p);
   return acc;
 }, {});
+
+// Format date helper
+function formatDate(date: Date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
+const allPosts = await getCollection('blog');
+const sortedTocPosts = allPosts.sort((a, b) => {
+  const volA = a.data.volume || 99;
+  const volB = b.data.volume || 99;
+  if (volA !== volB) return volA - volB;
+  
+  const chapA = a.data.chapter || 99;
+  const chapB = b.data.chapter || 99;
+  return chapA - chapB;
+});
+
+const postsByVolume = sortedTocPosts.reduce((acc, p) => {
+  const vol = p.data.volume || 99;
+  if (!acc[vol]) acc[vol] = [];
+  acc[vol].push(p);
+  return acc;
+}, {});
 ---
 
 <BaseLayout
@@ -81,199 +108,182 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
   publishedTime={post.data.pubDate}
   author={post.data.author}
 >
-  <article class="pb-12">
-    <div class="container max-w-3xl mx-auto pt-12 mb-8">
-      <a
-        href="/blog"
-        class="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="mr-2"
-        >
-          <path d="m15 18-6-6 6-6"></path>
-        </svg>
-        Back to Blog
-      </a>
-    </div>
+  <!-- 👇 [신규] 화면을 좌/우로 나누는 거대한 틀 -->
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-8 lg:gap-16 relative">
+    
+    <!-- 👈 [왼쪽] 구글 문서 스타일 사이드바 (위계 강조) -->
+    <aside class="w-full lg:w-56 flex-shrink-0 pt-12">
+      <div class="sticky top-24">
+        <div class="space-y-6 text-sm">
+          
+          {Object.entries(postsByVolume).map(([volString, posts]) => {
+            const isCurrentVolume = posts.some(p => p.id === post.id);
+            // 디스크립션에 적어둔 "[GL] 머지 컨플릭트 1"을 폴더명으로 불러옵니다
+            const volumeTitle = posts[0]?.data.description || `${volString}권`;
+            
+            return (
+              <details class="group" open={isCurrentVolume}>
+                <!-- 1계층: 굵은 글씨의 폴더명 -->
+                <summary class="font-bold text-foreground cursor-pointer list-none select-none text-base mb-3 hover:text-primary transition-colors">
+                  {volumeTitle}
+                </summary>
+                
+                <!-- 2계층: 얇은 세로선과 들여쓰기된 챕터 목록 -->
+                <ul class="space-y-3 text-muted-foreground border-l-[1.5px] border-border/60 ml-1 pl-4">
+                  {posts.map((p) => {
+                    const isCurrent = p.id === post.id;
+                    return (
+                      <li class={`${isCurrent ? 'text-primary font-bold' : 'hover:text-foreground transition-colors'}`}>
+                        <!-- 글 제목(1. 포획, 2. 수리 등)을 불러옵니다 -->
+                        <a href={`/blog/${p.id}`} class="block py-0.5">
+                          {p.data.title}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </details>
+            );
+          })}
 
-    <header class="mb-12">
-      <div class="container max-w-3xl mx-auto space-y-4">
-        <h1 class="text-5xl font-bold tracking-tight">{post.data.title}</h1>
+        </div>
+      </div>
+    </aside>
 
-        <p class="text-xl text-muted-foreground">{post.data.description}</p>
+    <!-- 👉 [오른쪽] 작가님의 기존 본문 영역 (클래스에 flex-1 추가) -->
+    <article class="flex-1 min-w-0 pb-12">
+      <div class="container max-w-3xl mx-auto pt-12 mb-8">
+        <a href="/blog" class="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+          Back to Blog
+        </a>
+      </div>
 
-        <div class="flex items-center gap-4 text-sm text-muted-foreground pt-2">
-          <time datetime={post.data.pubDate.toISOString()}>
-            {formatDate(post.data.pubDate)}
-          </time>
-          <span>•</span>
-          <span>{post.data.author}</span>
-          <span>•</span>
-          <span>{readingTime.text}</span>
+      <header class="mb-12">
+        <div class="container max-w-3xl mx-auto space-y-4">
+          <h1 class="text-5xl font-bold tracking-tight">{post.data.title}</h1>
+          <p class="text-xl text-muted-foreground">{post.data.description}</p>
+          <div class="flex items-center gap-4 text-sm text-muted-foreground pt-2">
+            <time datetime={post.data.pubDate.toISOString()}>
+              {formatDate(post.data.pubDate)}
+            </time>
+            <span>•</span>
+            <span>{post.data.author}</span>
+            <span>•</span>
+            <span>{readingTime.text}</span>
+          </div>
+          {
+            post.data.tags.length > 0 && (
+              <div class="flex flex-wrap gap-2 pt-2">
+                {post.data.tags.map((tag) => (
+                  <a href={`/tags/${tag}`} class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                    {tag}
+                  </a>
+                ))}
+              </div>
+            )
+          }
+        </div>
+      </header>
+
+      <div class="container max-w-3xl mx-auto px-6 sm:px-8">
+        <div class="prose prose-neutral dark:prose-invert max-w-none novel-text">
+          <Content />
         </div>
 
         {
-          post.data.tags.length > 0 && (
-            <div class="flex flex-wrap gap-2 pt-2">
-              {post.data.tags.map((tag) => (
-                <a
-                  href={`/tags/${tag}`}
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-                >
-                  {tag}
-                </a>
-              ))}
-            </div>
+          relatedPosts.length > 0 && (
+            <aside class="mt-16 pt-8 border-t" aria-labelledby="related-heading">
+              <h2 id="related-heading" class="text-xl font-bold tracking-tight mb-6">Related posts</h2>
+              <ul class="grid gap-4 sm:grid-cols-3">
+                {relatedPosts.map((related) => (
+                  <li>
+                    <a href={`/blog/${related.id}`} class="group block h-full rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/50">
+                      <time datetime={related.data.pubDate.toISOString()} class="text-xs text-muted-foreground">
+                        {formatDate(related.data.pubDate)}
+                      </time>
+                      <span class="mt-2 block text-sm font-medium leading-snug group-hover:text-primary transition-colors">
+                        {related.data.title}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </aside>
           )
         }
+
+        <footer class="mt-12 pt-8 border-t">
+          <nav class="flex items-center justify-between gap-8">
+            {
+              prevPost ? (
+                <a href={`/blog/${prevPost.id}`} class="group flex-1 text-left">
+                  <div class="text-xs text-muted-foreground mb-1">Previous</div>
+                  <div class="text-sm font-medium group-hover:text-primary transition-colors">{prevPost.data.title}</div>
+                </a>
+              ) : <div class="flex-1" />
+            }
+            <a href="/blog" class="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                <rect width="3" height="3" x="3" y="3" rx="1"></rect>
+                <rect width="3" height="3" x="10" y="3" rx="1"></rect>
+                <rect width="3" height="3" x="17" y="3" rx="1"></rect>
+                <rect width="3" height="3" x="3" y="10" rx="1"></rect>
+                <rect width="3" height="3" x="10" y="10" rx="1"></rect>
+                <rect width="3" height="3" x="17" y="10" rx="1"></rect>
+                <rect width="3" height="3" x="3" y="17" rx="1"></rect>
+                <rect width="3" height="3" x="10" y="17" rx="1"></rect>
+                <rect width="3" height="3" x="17" y="17" rx="1"></rect>
+              </svg>
+              All posts
+            </a>
+            {
+              nextPost ? (
+                <a href={`/blog/${nextPost.id}`} class="group flex-1 text-right">
+                  <div class="text-xs text-muted-foreground mb-1">Next</div>
+                  <div class="text-sm font-medium group-hover:text-primary transition-colors">{nextPost.data.title}</div>
+                </a>
+              ) : <div class="flex-1" />
+            }
+          </nav>
+        </footer>
       </div>
-    </header>
+    </article>
+  </div> <!-- 👈 거대한 틀 닫기 -->
 
-    <!-- 👇 여기가 진짜 본문이고, 여기에 여백(px-6 sm:px-8)이 들어가야 합니다 -->
-    <div class="container max-w-3xl mx-auto px-6 sm:px-8">
-      <div class="prose prose-neutral dark:prose-invert max-w-none novel-text">
-        <Content />
-      </div>
-
-      {
-        relatedPosts.length > 0 && (
-          <aside class="mt-16 pt-8 border-t" aria-labelledby="related-heading">
-            <h2 id="related-heading" class="text-xl font-bold tracking-tight mb-6">
-              Related posts
-            </h2>
-            <ul class="grid gap-4 sm:grid-cols-3">
-              {relatedPosts.map((related) => (
-                <li>
-                  <a
-                    href={`/blog/${related.id}`}
-                    class="group block h-full rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/50"
-                  >
-                    <time
-                      datetime={related.data.pubDate.toISOString()}
-                      class="text-xs text-muted-foreground"
-                    >
-                      {formatDate(related.data.pubDate)}
-                    </time>
-                    <span class="mt-2 block text-sm font-medium leading-snug group-hover:text-primary transition-colors">
-                      {related.data.title}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        )
-      }
-
-      <footer class="mt-12 pt-8 border-t">
-        <nav class="flex items-center justify-between gap-8">
-          {
-            prevPost ? (
-              <a href={`/blog/${prevPost.id}`} class="group flex-1 text-left">
-                <div class="text-xs text-muted-foreground mb-1">Previous</div>
-                <div class="text-sm font-medium group-hover:text-primary transition-colors">
-                  {prevPost.data.title}
-                </div>
-              </a>
-            ) : (
-              <div class="flex-1" />
-            )
-          }
-
-          <a
-            href="/blog"
-            class="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="mr-2"
-            >
-              <rect width="3" height="3" x="3" y="3" rx="1"></rect>
-              <rect width="3" height="3" x="10" y="3" rx="1"></rect>
-              <rect width="3" height="3" x="17" y="3" rx="1"></rect>
-              <rect width="3" height="3" x="3" y="10" rx="1"></rect>
-              <rect width="3" height="3" x="10" y="10" rx="1"></rect>
-              <rect width="3" height="3" x="17" y="10" rx="1"></rect>
-              <rect width="3" height="3" x="3" y="17" rx="1"></rect>
-              <rect width="3" height="3" x="10" y="17" rx="1"></rect>
-              <rect width="3" height="3" x="17" y="17" rx="1"></rect>
-            </svg>
-            All posts
-          </a>
-
-          {
-            nextPost ? (
-              <a href={`/blog/${nextPost.id}`} class="group flex-1 text-right">
-                <div class="text-xs text-muted-foreground mb-1">Next</div>
-                <div class="text-sm font-medium group-hover:text-primary transition-colors">
-                  {nextPost.data.title}
-                </div>
-              </a>
-            ) : (
-              <div class="flex-1" />
-            )
-          }
-        </nav>
-      </footer>
-    </div>
-  </article>
-
-  <!-- 👇 진행바 뼈대 추가 -->
+  <!-- 👇 (기존 유지) 진행바, 뷰어 메뉴, 이미지 발췌 코드 -->
   <div class="fixed top-0 left-0 w-full h-1 z-50 bg-transparent pointer-events-none">
     <div id="progress-bar" class="h-full bg-primary w-0 transition-all duration-150"></div>
   </div>
-<div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto">
-    <!-- 통합 컨트롤 패널 -->
-<div id="viewer-menu" class="hidden flex-col bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl p-4 w-[280px] gap-4 origin-bottom-right transition-all">
-  
-  <!-- 1. 글꼴 선택 -->
-  <div class="flex items-center gap-4">
-    <span class="text-sm font-medium text-muted-foreground w-8">글꼴</span>
-    <div class="flex flex-1 bg-muted rounded-lg p-1 text-sm font-medium">
-      <button id="btn-font-serif" class="flex-1 py-1.5 rounded-md bg-background shadow-sm transition-all">명조</button>
-      <button id="btn-font-sans" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">고딕</button>
-    </div>
-  </div>
 
-  <!-- 2. 글자 크기 -->
-  <div class="flex items-center gap-4">
-    <span class="text-sm font-medium text-muted-foreground w-8">크기</span>
-    <div class="flex flex-1 items-center bg-muted rounded-lg p-1 text-sm font-medium">
-      <button id="btn-text-minus" class="flex-1 py-1.5 hover:bg-background/50 rounded-md transition-all">-</button>
-      <span id="text-size-display" class="w-14 text-center">100%</span>
-      <button id="btn-text-plus" class="flex-1 py-1.5 hover:bg-background/50 rounded-md transition-all">+</button>
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto">
+    <div id="viewer-menu" class="hidden flex-col bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl p-4 w-[280px] gap-4 origin-bottom-right transition-all">
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-medium text-muted-foreground w-8">글꼴</span>
+        <div class="flex flex-1 bg-muted rounded-lg p-1 text-sm font-medium">
+          <button id="btn-font-serif" class="flex-1 py-1.5 rounded-md bg-background shadow-sm transition-all">명조</button>
+          <button id="btn-font-sans" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">고딕</button>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-medium text-muted-foreground w-8">크기</span>
+        <div class="flex flex-1 items-center bg-muted rounded-lg p-1 text-sm font-medium">
+          <button id="btn-text-minus" class="flex-1 py-1.5 hover:bg-background/50 rounded-md transition-all">-</button>
+          <span id="text-size-display" class="w-14 text-center">100%</span>
+          <button id="btn-text-plus" class="flex-1 py-1.5 hover:bg-background/50 rounded-md transition-all">+</button>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-medium text-muted-foreground w-8">간격</span>
+        <div class="flex flex-1 bg-muted rounded-lg p-1 text-sm font-medium">
+          <button id="btn-space-narrow" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">좁게</button>
+          <button id="btn-space-normal" class="flex-1 py-1.5 rounded-md bg-background shadow-sm transition-all">보통</button>
+          <button id="btn-space-wide" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">넓게</button>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <!-- 3. 줄 간격 -->
-  <div class="flex items-center gap-4">
-    <span class="text-sm font-medium text-muted-foreground w-8">간격</span>
-    <div class="flex flex-1 bg-muted rounded-lg p-1 text-sm font-medium">
-      <button id="btn-space-narrow" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">좁게</button>
-      <button id="btn-space-normal" class="flex-1 py-1.5 rounded-md bg-background shadow-sm transition-all">보통</button>
-      <button id="btn-space-wide" class="flex-1 py-1.5 rounded-md hover:bg-background/50 transition-all">넓게</button>
-    </div>
-  </div>
-</div>
-
-    <!-- 톱니바퀴 토글 버튼 (마우스 올리면 선명해짐) -->
     <button id="btn-remote-toggle" class="p-3 bg-card/80 backdrop-blur border border-border rounded-full shadow-lg opacity-70 hover:opacity-100 hover:border-primary/50 transition-all group">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-foreground group-hover:text-primary transition-colors">
         <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
@@ -281,46 +291,35 @@ const postsByVolume = sortedTocPosts.reduce((acc, p) => {
       </svg>
     </button>
   </div>
-<!-- 👇 (신규) 1. 드래그 시 마우스 근처에 뜨는 발췌 버튼 -->
-      <button id="quote-tooltip" class="hidden absolute z-50 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full shadow-xl pointer-events-auto transition-opacity hover:scale-105">
-        📸 이미지로 공유
-      </button>
 
-      <!-- 👇 (신규) 2. 사용자 눈에는 안 보이지만 뒤에서 구워질 엽서 도화지 -->
-      <div id="export-container" class="fixed top-0 left-[-9999px] z-[-1]">
-        <!-- 1080 x 1350 (4:5 비율) -->
-        <div id="export-card" class="w-[1080px] h-[1350px] bg-[#0b0710] flex flex-col justify-between p-24 relative overflow-hidden">
-          
-          <!-- 은은한 그리드 배경 (우주선 HUD 느낌) -->
-          <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px); background-size: 60px 60px;"></div>
-          
-          <!-- 인용문 (마루 부리) -->
-          <div class="flex-1 flex items-center justify-center z-10">
-            <p id="export-text" class="text-[#f1f1f1] text-5xl leading-[1.8] break-keep text-center" style="font-family: 'MaruBuri-Regular', serif;">
-              텍스트가 들어가는 자리
-            </p>
+  <button id="quote-tooltip" class="hidden absolute z-50 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full shadow-xl pointer-events-auto transition-opacity hover:scale-105">
+    📸 이미지로 공유
+  </button>
+  <div id="export-container" class="fixed top-0 left-[-9999px] z-[-1]">
+    <div id="export-card" class="w-[1080px] h-[1350px] bg-[#0b0710] flex flex-col justify-between p-24 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10" style="background-image: linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px); background-size: 60px 60px;"></div>
+      <div class="flex-1 flex items-center justify-center z-10">
+        <p id="export-text" class="text-[#f1f1f1] text-5xl leading-[1.8] break-keep text-center" style="font-family: 'MaruBuri-Regular', serif;">
+          텍스트가 들어가는 자리
+        </p>
+      </div>
+      <div class="flex justify-between items-end border-t border-white/20 pt-10 z-10" style="font-family: 'Pretendard', sans-serif;">
+        <div class="text-white/80">
+          <div class="text-3xl font-bold mb-3">{post.data.title}</div>
+          <div class="text-2xl text-white/60 mb-5">Vol. {post.data.volume || 1}</div>
+          <div class="text-xl tracking-wider text-white/50">By 42 (Mari)</div>
+        </div>
+        <div class="flex items-center gap-6">
+          <div class="text-right">
+            <span class="block text-white/40 text-lg mb-1">SCAN TO READ</span>
+            <span class="block text-white/70 font-medium text-xl">your-domain.com</span>
           </div>
-
-          <!-- 하단 메타 데이터 (고딕) -->
-          <div class="flex justify-between items-end border-t border-white/20 pt-10 z-10" style="font-family: 'Pretendard', sans-serif;">
-            <div class="text-white/80">
-              <div class="text-3xl font-bold mb-3">{post.data.title}</div>
-              <div class="text-2xl text-white/60 mb-5">Vol. 1</div>
-              <div class="text-xl tracking-wider text-white/50">By 42 (Mari)</div>
-            </div>
-            
-            <div class="flex items-center gap-6">
-              <div class="text-right">
-                <span class="block text-white/40 text-lg mb-1">SCAN TO READ</span>
-                <span class="block text-white/70 font-medium text-xl">your-domain.com</span>
-              </div>
-              <!-- QR 코드 캔버스 (흰 배경에 검은 큐알로 깔끔하게) -->
-              <canvas id="qr-canvas" class="w-28 h-28 bg-white p-2 rounded-lg"></canvas>
-            </div>
-          </div>
+          <canvas id="qr-canvas" class="w-28 h-28 bg-white p-2 rounded-lg"></canvas>
         </div>
       </div>
-</BaseLayout> <!-- 👈 템플릿 닫는 태그 -->
+    </div>
+  </div>
+</BaseLayout>
 
 <!-- 이미지 캡처 & QR 코드 생성 라이브러리 (Astro 에러 방지용 is:inline 추가!) -->
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
