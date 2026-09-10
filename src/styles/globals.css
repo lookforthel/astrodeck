@@ -354,98 +354,62 @@ body {
   letter-spacing: -0.06em !important; 
 }
 
-/* 1. 가장 밑바닥(html) 배경색 */
-html.dark, 
-html[data-theme="dark"] {
+/* ========================================================
+   다크모드: 밀도를 대폭 높인 심연의 우주 배경
+======================================================== */
+html.dark, html[data-theme="dark"] {
   background-color: #0b0710 !important; 
 }
-
-html.dark body,
-html[data-theme="dark"] body {
+html.dark body, html[data-theme="dark"] body {
   background-color: transparent !important;
 }
 
-/* 2. 별무리 뼈대 */
-html.dark body::before,
-html[data-theme="dark"] body::before,
-html.dark body::after,
-html[data-theme="dark"] body::after {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: -1; 
-  pointer-events: none; 
+html.dark body::before, html[data-theme="dark"] body::before,
+html.dark body::after, html[data-theme="dark"] body::after {
+  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; pointer-events: none; 
 }
 
-/* 3. 뒷면 레이어 (아주 작고 먼 별들, 거대한 도화지에 불규칙하게 흩뿌림) */
-html.dark body::before,
-html[data-theme="dark"] body::before {
+/* 뒷면 별무리 (밀도 2배 UP) */
+html.dark body::before, html[data-theme="dark"] body::before {
   background-image: 
-    radial-gradient(1px 1px at 100px 150px, rgba(255,255,255,0.4) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 300px 450px, rgba(255,255,255,0.3) 100%, transparent),
-    radial-gradient(1px 1px at 800px 200px, rgba(255,255,255,0.2) 100%, transparent),
-    radial-gradient(2px 2px at 500px 850px, rgba(255,255,255,0.15) 100%, transparent),
-    radial-gradient(1px 1px at 200px 900px, rgba(255,255,255,0.4) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 700px 650px, rgba(255,255,255,0.25) 100%, transparent),
-    radial-gradient(1px 1px at 900px 50px, rgba(255,255,255,0.3) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 50px 700px, rgba(255,255,255,0.2) 100%, transparent),
-    radial-gradient(1px 1px at 400px 300px, rgba(255,255,255,0.35) 100%, transparent),
-    radial-gradient(2px 2px at 850px 950px, rgba(255,255,255,0.1) 100%, transparent);
-  background-size: 500px 500px; 
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.4) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 25% 45%, rgba(255,255,255,0.3) 100%, transparent),
+    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.2) 100%, transparent),
+    radial-gradient(2px 2px at 60% 20%, rgba(255,255,255,0.15) 100%, transparent),
+    radial-gradient(1px 1px at 75% 65%, rgba(255,255,255,0.4) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 90% 10%, rgba(255,255,255,0.25) 100%, transparent),
+    radial-gradient(1px 1px at 5% 70%, rgba(255,255,255,0.3) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 55% 50%, rgba(255,255,255,0.35) 100%, transparent);
+  background-size: 300px 300px; /* 좁은 도화지에 꽉 채움 */
   animation: starDriftFar 90s linear infinite;
 }
 
-/* 4. 앞면 레이어 (조금 더 크고 푸른빛을 띠는 가까운 별들) */
-html.dark body::after,
-html[data-theme="dark"] body::after {
+/* 앞면 별무리 (밀도 2배 UP) */
+html.dark body::after, html[data-theme="dark"] body::after {
   background-image: 
-    radial-gradient(2px 2px at 150px 200px, rgba(150,200,255,0.25) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 600px 800px, rgba(200,200,255,0.3) 100%, transparent),
-    radial-gradient(2.5px 2.5px at 1100px 300px, rgba(255,255,255,0.15) 100%, transparent),
-    radial-gradient(2px 2px at 300px 1200px, rgba(180,220,255,0.2) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 900px 1000px, rgba(220,220,255,0.25) 100%, transparent),
-    radial-gradient(2.5px 2.5px at 1300px 700px, rgba(255,255,255,0.1) 100%, transparent),
-    radial-gradient(2px 2px at 50px 1350px, rgba(150,200,255,0.3) 100%, transparent),
-    radial-gradient(1.5px 1.5px at 800px 150px, rgba(255,255,255,0.2) 100%, transparent);
-  background-size: 700px 700px; /* 타일 크기를 1400px로 엇갈리게 설정 */
+    radial-gradient(2px 2px at 15% 25%, rgba(150,200,255,0.25) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 35% 75%, rgba(200,200,255,0.3) 100%, transparent),
+    radial-gradient(2.5px 2.5px at 65% 15%, rgba(255,255,255,0.15) 100%, transparent),
+    radial-gradient(2px 2px at 85% 60%, rgba(180,220,255,0.2) 100%, transparent),
+    radial-gradient(1.5px 1.5px at 5% 50%, rgba(220,220,255,0.25) 100%, transparent),
+    radial-gradient(2px 2px at 75% 35%, rgba(150,200,255,0.3) 100%, transparent);
+  background-size: 400px 400px; 
   animation: starDriftNear 60s linear infinite;
 }
 
-/* 5. 도화지 크기에 맞춰 끊김 없이 스크롤되는 애니메이션 */
-@keyframes starDriftFar {
-  0% { background-position: 0px 0px; }
-  100% { background-position: 0px -500px; } 
-}
-@keyframes starDriftNear {
-  0% { background-position: 0px 0px; }
-  100% { background-position: 0px -700px; } 
-}
+@keyframes starDriftFar { 0% { background-position: 0px 0px; } 100% { background-position: 0px -300px; } }
+@keyframes starDriftNear { 0% { background-position: 0px 0px; } 100% { background-position: 0px -400px; } }
 
 /* ========================================================
-   라이트모드 전용: 멸균된 우주선 내부 (천천히 흐르는 도면 그리드) 
+   라이트모드: 정적인 모눈종이 (애니메이션 제거)
 ======================================================== */
 html:not(.dark):not([data-theme="dark"]) body {
-  background-color: #fafafa !important; /* 약간 차가운 느낌의 백색 */
+  background-color: #fafafa !important; 
 }
-
 html:not(.dark):not([data-theme="dark"]) body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: -1;
-  pointer-events: none;
-  
-  /* 아주 얇고 투명한 가로세로 모눈종이 패턴 */
+  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; pointer-events: none;
   background-image: 
-    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px; /* 모눈 한 칸의 크기 */
-  
-  /* 60초 동안 대각선으로 아주 미세하게 밀려가는 애니메이션 */
-  animation: gridDrift 60s linear infinite;
-}
-
-@keyframes gridDrift {
-  0% { background-position: 0px 0px; }
-  100% { background-position: -40px -40px; }
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px; 
 }
