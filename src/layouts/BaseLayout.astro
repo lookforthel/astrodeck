@@ -49,7 +49,7 @@ interface Props {
 
 const {
   title,
-  description = 'AstroDeck - Modern Astro.js Component Library',
+  description = 'Merge Conflict',
   image,
   type = 'website',
   publishedTime,
@@ -69,8 +69,9 @@ const enableAnalytics = !!process.env.VERCEL;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri.css" />
 
+    {/* 👇 2. title에 '현재 제목 | Merge Conflict' 형태로 꼬리표를 강제 부착합니다. */}
     <Head
-      title={title}
+      title={title === 'Merge Conflict' ? title : `${title} | Merge Conflict`}
       description={description}
       image={image}
       type={type}
