@@ -6,7 +6,17 @@ import { getReadingTime } from '@/lib/reading-time';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog');
-  const sortedPosts = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  
+  // 1. 단행본 순서에 맞게 권(Volume) -> 화(Chapter) 기준 오름차순 정렬로 굳히기
+  const sortedPosts = blogPosts.sort((a, b) => {
+    const volA = a.data.volume || 99;
+    const volB = b.data.volume || 99;
+    if (volA !== volB) return volA - volB;
+    
+    const chapA = a.data.chapter || 99;
+    const chapB = b.data.chapter || 99;
+    return chapA - chapB;
+  });
 
   return sortedPosts.map((post, index) => {
     const relatedPosts = sortedPosts
@@ -24,8 +34,9 @@ export async function getStaticPaths() {
       params: { slug: post.id },
       props: {
         post,
-        prevPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
-        nextPost: index > 0 ? sortedPosts[index - 1] : null,
+        // 2. 정방향 배열에 맞게 이전글(-1)과 다음글(+1) 위치를 정상화
+        prevPost: index > 0 ? sortedPosts[index - 1] : null,
+        nextPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
         relatedPosts,
       },
     };
