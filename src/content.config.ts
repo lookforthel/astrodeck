@@ -14,6 +14,8 @@ const blog = defineCollection({
       // The image() helper validates the file and enables Astro's optimized <Image /> output.
       image: image().optional(),
       tags: z.array(z.string()).default([]),
+      volume: z.number().optional(),
+      chapter: z.number().optional(),
     }),
 });
 
