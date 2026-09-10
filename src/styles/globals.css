@@ -30,26 +30,39 @@
     'Courier New', monospace;
 
   /* Light mode colors */
-  --color-background: oklch(100% 0 0);
-  --color-foreground: oklch(9.8% 0.0016 286.75);
-  --color-card: oklch(100% 0 0);
-  --color-card-foreground: oklch(9.8% 0.0016 286.75);
-  --color-popover: oklch(100% 0 0);
-  --color-popover-foreground: oklch(9.8% 0.0016 286.75);
-  --color-primary: oklch(11.2% 0.0079 286.75);
-  --color-primary-foreground: oklch(98% 0.0011 286.75);
-  --color-secondary: oklch(96.1% 0.0011 286.75);
-  --color-secondary-foreground: oklch(11.2% 0.0079 286.75);
-  --color-muted: oklch(96.1% 0.0011 286.75);
-  --color-muted-foreground: oklch(40% 0.0018 286.75);
-  --color-accent: oklch(96.1% 0.0011 286.75);
-  --color-accent-foreground: oklch(11.2% 0.0079 286.75);
+  /* 배경과 본문: 따뜻하고 눈이 편안한 크림 베이지 & 짙은 먹색 */
+  --color-background: oklch(98% 0.01 85);
+  --color-foreground: oklch(35% 0.005 85);
+  
+  /* 박스와 팝업: 배경보다 살짝 밝아 구분이 가는 톤 */
+  --color-card: oklch(99.5% 0.005 85);
+  --color-card-foreground: oklch(35% 0.005 85);
+  --color-popover: oklch(99.5% 0.005 85);
+  --color-popover-foreground: oklch(35% 0.005 85);
+  
+  /* 포인트 색상 */
+  --color-primary: oklch(45% 0.05 285);
+  --color-primary-foreground: oklch(98% 0 0);
+  
+  /* 서브 영역 */
+  --color-secondary: oklch(95% 0.01 85);
+  --color-secondary-foreground: oklch(35% 0.005 85);
+  
+  /* UI 글자 (목차, 날짜 등): 본문보다 덜 진한 차콜 그레이 */
+  --color-muted: oklch(95% 0.01 85);
+  --color-muted-foreground: oklch(60% 0.005 85); 
+  
+  --color-accent: oklch(95% 0.01 85);
+  --color-accent-foreground: oklch(35% 0.005 85);
+  
   --color-destructive: oklch(60.2% 0.177 29.23);
-  --color-destructive-foreground: oklch(98% 0.0011 286.75);
-  --color-border: oklch(91.4% 0.009 286.75);
-  --color-input: oklch(91.4% 0.009 286.75);
-  --color-ring: oklch(9.8% 0.0016 286.75);
-
+  --color-destructive-foreground: oklch(98% 0 0);
+  
+  /* 은은한 테두리선 */
+  --color-border: oklch(90% 0.01 85);
+  --color-input: oklch(90% 0.01 85);
+  --color-ring: oklch(35% 0.005 85);
+  
   --radius: 0.5rem;
 
   /* Accordion animations */
@@ -76,25 +89,38 @@
 }
 
 .dark {
-  --color-background: oklch(1.5% 0 0);
-  --color-foreground: oklch(98% 0 0);
-  --color-card: oklch(4% 0 0);
-  --color-card-foreground: oklch(98% 0 0);
-  --color-popover: oklch(4% 0 0);
-  --color-popover-foreground: oklch(98% 0 0);
-  --color-primary: oklch(98% 0 0);
-  --color-primary-foreground: oklch(1.5% 0 0);
-  --color-secondary: oklch(10% 0 0);
-  --color-secondary-foreground: oklch(98% 0 0);
-  --color-muted: oklch(10% 0 0);
-  --color-muted-foreground: oklch(71% 0 0);
-  --color-accent: oklch(10% 0 0);
-  --color-accent-foreground: oklch(98% 0 0);
+/* 배경과 본문: 완전 블랙(1.5%) 대신 가독성이 가장 좋은 밝기 16%의 네이비 */
+  --color-background: oklch(16% 0.015 285);
+  --color-foreground: oklch(92% 0.005 285);
+  
+  /* 박스와 팝업: 배경과 스무스하게 연결되는 톤 */
+  --color-card: oklch(20% 0.015 285);
+  --color-card-foreground: oklch(92% 0.005 285);
+  --color-popover: oklch(20% 0.015 285);
+  --color-popover-foreground: oklch(92% 0.005 285);
+  
+  /* 포인트 색상 */
+  --color-primary: oklch(80% 0.05 285);
+  --color-primary-foreground: oklch(16% 0.015 285);
+  
+  /* 서브 영역 */
+  --color-secondary: oklch(23% 0.015 285);
+  --color-secondary-foreground: oklch(92% 0.005 285);
+  
+  /* UI 글자: 눈이 부시지 않게 톤다운된 라이트 그레이 */
+  --color-muted: oklch(23% 0.015 285);
+  --color-muted-foreground: oklch(75% 0.01 285);
+  
+  --color-accent: oklch(23% 0.015 285);
+  --color-accent-foreground: oklch(92% 0.005 285);
+  
   --color-destructive: oklch(30.6% 0.132 29.23);
   --color-destructive-foreground: oklch(98% 0 0);
-  --color-border: oklch(25% 0 0);
-  --color-input: oklch(25% 0 0);
-  --color-ring: oklch(80% 0 0);
+  
+  /* 테두리선: 어둠 속에서 은은하게 빛나는 선 */
+  --color-border: oklch(25% 0.015 285);
+  --color-input: oklch(25% 0.015 285);
+  --color-ring: oklch(80% 0.05 285);
 }
 
 * {
