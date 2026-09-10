@@ -303,8 +303,9 @@ function formatDate(date: Date) {
       </div>
 </BaseLayout> <!-- 👈 템플릿 닫는 태그 -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<!-- 이미지 캡처 & QR 코드 생성 라이브러리 (Astro 에러 방지용 is:inline 추가!) -->
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
 <script>
   document.addEventListener('astro:page-load', () => {
