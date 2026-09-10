@@ -424,7 +424,7 @@ html:not(.dark):not([data-theme="dark"]) body::before {
 }
 
 .novel-text hr::before {
-  content: '⚙    ⚙    ⚙'; /* 👈 원하시는 기호로 언제든 수정하세요! */
+  content: '✵    ✵    ✵'; /* 👈 원하시는 기호로 언제든 수정하세요! */
   color: #6b7280 !important; /* 약간 어두운 회색 */
   font-size: 1.1rem !important;
   letter-spacing: 0.5em; /* 기호 사이 간격 넓게 */
