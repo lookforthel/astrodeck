@@ -1,0 +1,134 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// 1. 갤러리 폴더 경로
+const galleryDir = path.join(process.cwd(), 'public/gallery');
+
+// 2. 그림 파일 목록 가져오기
+let imageFiles = [];
+if (fs.existsSync(galleryDir)) {
+  imageFiles = fs.readdirSync(galleryDir).filter(file => /\.(jpg|jpeg|png|webp|gif)$/i.test(file));
+}
+
+// 3. 🎯 파일명 분해 및 정보 자동 추출 (제목 없음, 좌측 닉네임, 우측 태그)
+const galleryItems = imageFiles.map(filename => {
+  const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
+  const parts = nameWithoutExt.split('@');
+  
+  let artistDisplay = '둑중개'; // 기본값 (내 그림)
+  let badgeText = null;         // 기본값 (태그 없음)
+
+  // 조각이 3개인 경우 (예: 커미션@홍길동@hong123.jpg)
+  if (parts.length >= 3) {
+    badgeText = parts[0].trim();
+    artistDisplay = `${parts[1].trim()}@${parts[2].trim()} 님`;
+  } 
+  // 혹시 아이디를 깜빡해서 2개인 경우 (예: ♡@김철수.png)
+  else if (parts.length === 2) {
+    badgeText = parts[0].trim();
+    artistDisplay = `${parts[1].trim()} 님`;
+  }
+
+  // 만약 태그 부분이 비어있다면 배지를 띄우지 않음 (방어 로직)
+  if (badgeText === '') badgeText = null;
+
+  return {
+    src: `/gallery/${filename}`,
+    artistDisplay,
+    badgeText
+  };
+});
+---
+
+<BaseLayout title="Gallery" description="">
+  
+  <!-- 텍스트 캡션 (제목 제거, 좌측 닉네임, 우측 종류 태그) -->
+            <div class="p-3 border-t border-border/20 flex items-center justify-between gap-2">
+              
+              <!-- 좌측: 작가 정보 -->
+              <span class="text-xs text-muted-foreground font-mono truncate">
+                {item.artistDisplay}
+              </span>
+
+              <!-- 우측: 태그 박스 (값이 있을 때만 출력) -->
+              {item.badgeText && (
+                <span class="text-[10px] px-2 py-0.5 border border-border/50 bg-background/50 rounded text-foreground/80 tracking-wider shrink-0">
+                  {item.badgeText}
+                </span>
+              )}
+              
+            </div>
+    ) : (
+      <!-- 🖼️ 핀터레스트 스타일 그리드 -->
+      <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 pb-24">
+        {galleryItems.map((item) => (
+          <div class="break-inside-avoid rounded-xl overflow-hidden border border-border/40 bg-card/10 group shadow-sm hover:border-primary/50 transition-colors">
+            
+            <div class="relative cursor-zoom-in overflow-hidden">
+              <img 
+                src={item.src} 
+                alt={item.title} 
+                class="w-full h-auto object-cover gallery-img transition-transform duration-500 group-hover:scale-105"
+                data-src={item.src}
+                loading="lazy"
+              />
+            </div>
+            
+                        
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- 🛑 원본 보기 팝업 -->
+  <div id="lightbox" class="fixed inset-0 z-[200] bg-background/95 backdrop-blur-md hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <button id="lightbox-close" class="absolute top-6 right-6 text-muted-foreground hover:text-foreground bg-card/50 p-2 rounded-full backdrop-blur-sm transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="확대된 이미지" class="max-h-[90vh] max-w-[95vw] object-contain rounded-md shadow-2xl scale-95 transition-transform duration-300" />
+  </div>
+
+</BaseLayout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const images = document.querySelectorAll('.gallery-img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.getElementById('lightbox-close');
+
+    if (!lightbox || !lightboxImg) return;
+
+    images.forEach(img => {
+      img.addEventListener('click', (e) => {
+        const src = (e.target as HTMLImageElement).getAttribute('data-src');
+        if (src) {
+          lightboxImg.setAttribute('src', src);
+          lightbox.style.display = 'flex';
+          setTimeout(() => {
+            lightbox.classList.remove('opacity-0');
+            lightboxImg.classList.remove('scale-95');
+          }, 10);
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    });
+
+    const closeLightbox = () => {
+      lightbox.classList.add('opacity-0');
+      lightboxImg.classList.add('scale-95');
+      setTimeout(() => {
+        lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }, 300);
+    };
+
+    closeBtn?.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+  });
+</script>
