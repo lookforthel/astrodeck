@@ -12,10 +12,22 @@ if (fs.existsSync(galleryDir)) {
   imageFiles = fs.readdirSync(galleryDir).filter(file => /\.(jpg|jpeg|png|webp|gif)$/i.test(file));
 }
 
+// 💡 코멘트를 달고 싶은 그림의 파일명과 내용을 짝지어 적어둡니다.
+const imageComments = {
+  "첫 디자인@둑중개.png": "글쓰기 전에 최초로 잡은 이미지",
+  "초기 포스터@둑중개.png": "포스터로 쓰려고 열심히 그렸는데 어쩐지 안씀",
+  "♡@우야2@GinGirinGrm.jpg": "1부 완결 기념 선물.. 대박 맘에드는 구도"
+  "19@건지@.jpg": "X짜는 외전을 정말 내고 싶은데 모르겠어요"
+  "콩알@별삐@byorvina.jpg": "콩알은 콩알이니까.."
+  "♡@ㅍㅊ@poncho_anything.jpg": "트위터 알티이벤 당첨작.. /_/"
+
+};
+
 // 3. 🎯 파일명 분해 및 정보 자동 추출 로직
-const galleryItems = imageFiles.map(filename => {
+  const galleryItems = imageFiles.map(filename => {
   const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
   const parts = nameWithoutExt.split('@').map(p => p.trim());
+  const comment = imageComments[filename] || null;
   
   let leftText = ''; 
   let rightBadge = null;
@@ -50,7 +62,8 @@ const galleryItems = imageFiles.map(filename => {
     src: `/gallery/${filename}`,
     leftText,
     rightBadge,
-    isAdult // 블러 처리를 위해 HTML로 전달
+    isAdult,
+    comment  
   };
 });
 
@@ -104,7 +117,11 @@ galleryItems.sort(() => Math.random() - 0.5);
                 </span>
               )}
             </div>
-            
+            {item.comment && (
+              <div class="px-3 pb-3 text-sm text-foreground/90 leading-relaxed break-keep">
+                <p>{item.comment}</p>
+              </div>
+            )}
           </div>
         ))}
       </div>
