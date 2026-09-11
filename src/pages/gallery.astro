@@ -19,35 +19,38 @@ const galleryItems = imageFiles.map(filename => {
   
   let leftText = ''; 
   let rightBadge = null;
+  let isAdult = false; // 🔞 후방주의 이미지 여부 체크
 
-  // 🌟 핵심: 마지막 단어가 '둑중개'인지 확인
   if (parts[parts.length - 1] === '둑중개') {
-    // 내 그림일 경우 (제목@둑중개.jpg) -> 좌측: 제목, 우측: 태그 없음
+    // 내 그림일 경우 (제목@둑중개.jpg)
     leftText = parts[0];
     rightBadge = null;
   } else {
     // 다른 사람의 그림일 경우
     if (parts.length >= 3) {
-      // 종류@닉네임@아이디.jpg -> 좌측: 닉네임@아이디 님, 우측: 종류
       rightBadge = parts[0];
       leftText = `${parts[1]}@${parts[2]} 님`;
     } else if (parts.length === 2) {
-      // 종류@닉네임.jpg (아이디가 없는 경우)
       rightBadge = parts[0];
       leftText = `${parts[1]} 님`;
     } else {
-      // 포맷이 안 맞을 경우 대비한 기본값
       leftText = parts[0];
     }
   }
 
-  // 빈 태그 방어 로직
-  if (rightBadge === '') rightBadge = null;
+  // 🚨 만약 태그가 '19'라면? 블러 처리 켜고 빨간 동그라미로 변경!
+  if (rightBadge === '19') {
+    isAdult = true;
+    rightBadge = '🔴';
+  } else if (rightBadge === '') {
+    rightBadge = null;
+  }
 
   return {
     src: `/gallery/${filename}`,
     leftText,
-    rightBadge
+    rightBadge,
+    isAdult // 블러 처리를 위해 HTML로 전달
   };
 });
 ---
@@ -57,28 +60,35 @@ const galleryItems = imageFiles.map(filename => {
   <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
     <header class="mb-16 text-center">
       <h1 class="text-4xl font-bold tracking-tight mb-4">Gallery</h1>
-      <p class="text-muted-foreground">어케나오는지봐야지</p>
+      <p class="text-muted-foreground">시각 데이터 보관소</p>
     </header>
 
     {galleryItems.length === 0 ? (
       <div class="text-center text-muted-foreground py-20 border border-dashed border-border/50 rounded-xl">
         public/gallery 폴더에 그림을 넣어주세요.<br/>
-        <span class="text-sm opacity-70 mt-2 inline-block">커미션: 종류@닉네임@아이디.jpg / 내그림: 제목@둑중개.jpg</span>
+        <span class="text-sm opacity-70 mt-2 inline-block">19금 처리: 19@닉네임@아이디.jpg</span>
       </div>
     ) : (
-
       <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 pb-24">
         {galleryItems.map((item) => (
           <div class="break-inside-avoid rounded-xl overflow-hidden border border-border/40 bg-card/10 group shadow-sm hover:border-primary/50 transition-colors">
             
-            <div class="relative cursor-zoom-in overflow-hidden">
+            <div class="relative cursor-zoom-in overflow-hidden bg-muted">
+              <!-- 🔞 isAdult가 true면 blur-2xl(강한 블러)과 scale-110(가장자리 흐려짐 방지) 클래스를 추가합니다 -->
               <img 
                 src={item.src} 
                 alt={item.leftText} 
-                class="w-full h-auto object-cover gallery-img transition-transform duration-500 group-hover:scale-105"
+                class={`w-full h-auto object-cover gallery-img transition-all duration-500 ${item.isAdult ? 'blur-2xl scale-110' : 'group-hover:scale-105'}`}
                 data-src={item.src}
                 loading="lazy"
               />
+              
+              <!-- 블러 처리된 이미지 위에 안내 문구 살짝 띄우기 (선택 사항) -->
+              {item.isAdult && (
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-60">
+                  <span class="px-3 py-1 bg-black/60 text-white text-xs tracking-widest rounded backdrop-blur-sm">CLICK TO VIEW</span>
+                </div>
+              )}
             </div>
             
             <div class="p-3 border-t border-border/20 flex items-center justify-between gap-2">
@@ -99,11 +109,11 @@ const galleryItems = imageFiles.map(filename => {
     )}
   </div>
 
-
   <div id="lightbox" class="fixed inset-0 z-[200] bg-background/95 backdrop-blur-md hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
     <button id="lightbox-close" class="absolute top-6 right-6 text-muted-foreground hover:text-foreground bg-card/50 p-2 rounded-full backdrop-blur-sm transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
+    <!-- 팝업 이미지에는 블러 클래스가 없으므로 항상 선명하게 보입니다 -->
     <img id="lightbox-img" src="" alt="확대된 이미지" class="max-h-[90vh] max-w-[95vw] object-contain rounded-md shadow-2xl scale-95 transition-transform duration-300" />
   </div>
 
