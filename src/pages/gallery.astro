@@ -12,54 +12,59 @@ if (fs.existsSync(galleryDir)) {
   imageFiles = fs.readdirSync(galleryDir).filter(file => /\.(jpg|jpeg|png|webp|gif)$/i.test(file));
 }
 
-// 3. 🎯 파일명 분해 및 정보 자동 추출 (제목 없음, 좌측 닉네임, 우측 태그)
+// 3. 🎯 파일명 분해 및 정보 자동 추출 로직
 const galleryItems = imageFiles.map(filename => {
   const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
-  const parts = nameWithoutExt.split('@');
+  const parts = nameWithoutExt.split('@').map(p => p.trim());
   
-  let artistDisplay = '둑중개'; // 기본값 (내 그림)
-  let badgeText = null;         // 기본값 (태그 없음)
+  let leftText = ''; 
+  let rightBadge = null;
 
-  // 조각이 3개인 경우 (예: 커미션@홍길동@hong123.jpg)
-  if (parts.length >= 3) {
-    badgeText = parts[0].trim();
-    artistDisplay = `${parts[1].trim()}@${parts[2].trim()} 님`;
-  } 
-  // 혹시 아이디를 깜빡해서 2개인 경우 (예: ♡@김철수.png)
-  else if (parts.length === 2) {
-    badgeText = parts[0].trim();
-    artistDisplay = `${parts[1].trim()} 님`;
+  // 🌟 핵심: 마지막 단어가 '둑중개'인지 확인
+  if (parts[parts.length - 1] === '둑중개') {
+    // 내 그림일 경우 (제목@둑중개.jpg) -> 좌측: 제목, 우측: 태그 없음
+    leftText = parts[0];
+    rightBadge = null;
+  } else {
+    // 다른 사람의 그림일 경우
+    if (parts.length >= 3) {
+      // 종류@닉네임@아이디.jpg -> 좌측: 닉네임@아이디 님, 우측: 종류
+      rightBadge = parts[0];
+      leftText = `${parts[1]}@${parts[2]} 님`;
+    } else if (parts.length === 2) {
+      // 종류@닉네임.jpg (아이디가 없는 경우)
+      rightBadge = parts[0];
+      leftText = `${parts[1]} 님`;
+    } else {
+      // 포맷이 안 맞을 경우 대비한 기본값
+      leftText = parts[0];
+    }
   }
 
-  // 만약 태그 부분이 비어있다면 배지를 띄우지 않음 (방어 로직)
-  if (badgeText === '') badgeText = null;
+  // 빈 태그 방어 로직
+  if (rightBadge === '') rightBadge = null;
 
   return {
     src: `/gallery/${filename}`,
-    artistDisplay,
-    badgeText
+    leftText,
+    rightBadge
   };
 });
 ---
 
-<BaseLayout title="Gallery" description="">
+<BaseLayout title="Gallery" description="그림">
   
-  <!-- 텍스트 캡션 (제목 제거, 좌측 닉네임, 우측 종류 태그) -->
-            <div class="p-3 border-t border-border/20 flex items-center justify-between gap-2">
-              
-              <!-- 좌측: 작가 정보 -->
-              <span class="text-xs text-muted-foreground font-mono truncate">
-                {item.artistDisplay}
-              </span>
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
+    <header class="mb-16 text-center">
+      <h1 class="text-4xl font-bold tracking-tight mb-4">Gallery</h1>
+      <p class="text-muted-foreground">어케나오는지봐야지</p>
+    </header>
 
-              <!-- 우측: 태그 박스 (값이 있을 때만 출력) -->
-              {item.badgeText && (
-                <span class="text-[10px] px-2 py-0.5 border border-border/50 bg-background/50 rounded text-foreground/80 tracking-wider shrink-0">
-                  {item.badgeText}
-                </span>
-              )}
-              
-            </div>
+    {galleryItems.length === 0 ? (
+      <div class="text-center text-muted-foreground py-20 border border-dashed border-border/50 rounded-xl">
+        public/gallery 폴더에 그림을 넣어주세요.<br/>
+        <span class="text-sm opacity-70 mt-2 inline-block">커미션: 종류@닉네임@아이디.jpg / 내그림: 제목@둑중개.jpg</span>
+      </div>
     ) : (
       <!-- 🖼️ 핀터레스트 스타일 그리드 -->
       <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 pb-24">
@@ -69,14 +74,25 @@ const galleryItems = imageFiles.map(filename => {
             <div class="relative cursor-zoom-in overflow-hidden">
               <img 
                 src={item.src} 
-                alt={item.title} 
+                alt={item.leftText} 
                 class="w-full h-auto object-cover gallery-img transition-transform duration-500 group-hover:scale-105"
                 data-src={item.src}
                 loading="lazy"
               />
             </div>
             
-                        
+            <div class="p-3 border-t border-border/20 flex items-center justify-between gap-2">
+              <span class="text-xs text-muted-foreground font-mono truncate">
+                {item.leftText}
+              </span>
+
+              {item.rightBadge && (
+                <span class="text-[10px] px-2 py-0.5 border border-border/50 bg-background/50 rounded text-foreground/80 tracking-wider shrink-0">
+                  {item.rightBadge}
+                </span>
+              )}
+            </div>
+            
           </div>
         ))}
       </div>
