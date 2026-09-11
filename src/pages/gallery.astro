@@ -53,6 +53,8 @@ const galleryItems = imageFiles.map(filename => {
     isAdult // 블러 처리를 위해 HTML로 전달
   };
 });
+
+galleryItems.sort(() => Math.random() - 0.5);
 ---
 
 <BaseLayout title="Gallery" description="그림">
