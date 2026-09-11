@@ -78,7 +78,7 @@ const galleryItems = imageFiles.map(filename => {
               <img 
                 src={item.src} 
                 alt={item.leftText} 
-                class={`w-full h-auto object-cover gallery-img transition-all duration-500 ${item.isAdult ? 'blur-2xl scale-110' : 'group-hover:scale-105'}`}
+                class={`w-full h-auto object-cover gallery-img transition-all duration-500 ${item.isAdult ? 'blur-md scale-110' : 'group-hover:scale-105'}`}
                 data-src={item.src}
                 loading="lazy"
               />
