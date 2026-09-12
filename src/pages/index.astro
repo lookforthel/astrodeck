@@ -2,147 +2,159 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Merge Conflict" description="둑중개 아카이브">
+<BaseLayout title="Merge Conflict" description="개인 아카이브 및 소설 연재처">
   
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex items-center justify-center min-h-[80vh]">
     
-    <!-- 🔲 메인 HUD 박스 -->
-    <div class="w-full bg-background border border-border/20 rounded-xl p-5 md:p-8 font-mono shadow-2xl overflow-hidden text-foreground/80">
+    <!-- 🔲 메인 HUD 컨테이너 -->
+    <div class="w-full font-mono text-foreground/80">
       
-      <!-- 📱 반응형 그리드 래퍼 -->
-      <!-- 모바일: flex-col (자식들의 order 속성에 따라 세로 정렬) / 데스크톱: flex-row (2단 컬럼) -->
-      <div class="flex flex-col lg:flex-row gap-6">
+      <!-- 📱 5분할 대시보드 그리드 (모바일: order로 정렬 / 데스크톱: 3열 2행 완벽 정렬) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
         
-        <!-- ⬅️ 좌측 컬럼 (데스크톱 기준) -->
-        <div class="contents lg:flex lg:flex-col lg:w-1/3 lg:gap-6">
+        <!-- [4] BIO_SYNC (좌측 상단) -->
+        <div class="order-4 lg:order-none lg:col-start-1 lg:row-start-1 flex flex-col p-5 border border-border/20 bg-card/30 rounded-xl shadow-sm">
+          <h3 class="text-xs font-bold text-[#8b5cf6] tracking-widest border-b border-[#8b5cf6]/30 pb-2 mb-4">
+            [ BIO_SYNC : ACTIVE ]
+          </h3>
           
-          <!-- [3] 바이오 싱크 블록 -->
-          <div class="order-4 lg:order-none p-5 border border-border/20 bg-card/10 rounded-lg">
-            <h3 class="text-xs font-bold text-[#329852] tracking-widest border-b border-[#329852]/30 pb-2 mb-4">
-              [ BIO_SYNC : ACTIVE ]
-            </h3>
-            
-            <!-- 📈 SVG 심전도 애니메이션 -->
-            <div class="h-12 w-full mb-5 relative overflow-hidden flex items-center opacity-80 border-b border-border/10">
-              <svg class="absolute w-[200%] h-full ecg-animate text-[#329852]" viewBox="0 0 200 100" preserveAspectRatio="none">
-                <path d="M0,50 L20,50 L25,30 L35,90 L45,10 L55,70 L60,50 L100,50 L120,50 L125,30 L135,90 L145,10 L155,70 L160,50 L200,50" 
-                      fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </div>
-
-            <!-- 📊 실시간 변동 데이터 리스트 -->
-            <ul class="text-xs space-y-3">
-              <li class="flex justify-between items-center">
-                <span class="opacity-60">TARGET:</span> 
-                <span class="text-foreground">Human_Neva</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <span class="opacity-60">HEART_RATE:</span> 
-                <span class="text-[#329852] font-bold"><span id="bpm-value">58</span> bpm</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <span class="opacity-60">O2_CONSUMPTION:</span> 
-                <span class="text-[#329852]"><span id="o2-value">45.2</span> L/h</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <span class="opacity-60">CORE_TEMP:</span> 
-                <span class="text-foreground"><span id="temp-value">37.2</span> °C</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <span class="opacity-60">CORTISOL_LVL:</span> 
-                <span class="text-foreground"><span id="cortisol-value">9.4</span> ㎍/dL</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <span class="opacity-60">OXYTOCIN_LVL:</span> 
-                <span class="text-[#329852]"><span id="oxy-value">42</span> % <span class="text-[10px] animate-pulse opacity-70">(High)</span></span>
-              </li>
-              <li class="flex justify-between items-center mt-3 pt-3 border-t border-border/10">
-                <span class="opacity-60">PROSTHETIC_SYNC:</span> 
-                <span class="text-[#329852]">98.4%</span>
-              </li>
-            </ul>
-          </div>
-          
-          <!-- [4] 백그라운드 태스크 블록 -->
-          <div class="order-3 lg:order-none p-5 border border-border/20 bg-card/10 rounded-lg">
-            <h3 class="text-xs font-bold text-[#329852] tracking-widest border-b border-[#329852]/30 pb-2 mb-4">
-              [ BACKGROUND_TASKS ]
-            </h3>
-            <ul class="text-[11px] leading-relaxed space-y-3">
-              <li class="line-through opacity-40">[✓] 제3 화물칸 대기 순환 필터 정화</li>
-              <li class="text-foreground">[▶] Human_Neva 샤워 모니터링 (예상: 운동 루틴 종료 후, 4시간 뒤)</li>
-              <li class="opacity-80">[✓] Human_Cathode 온수 사용량 50% 제한 (사유: 에너지 절약)</li>
-              <li class="opacity-80">[▶] 주 엔진 냉각수 파이프라인 위상 보정</li>
-              <li class="text-foreground">[▶] Human_Neva 수분 손실 맞춤형 전해질 배합</li>
-              <li class="opacity-80">[✓] Human_Cathode 생활구역B 출입 권한 박탈 (사유: 오염 방지)</li>
-              <li class="text-[#329852] opacity-90">[■] Human_Neva 골반 및 우측 의체 접합부 온열 마사지 모듈 (대기)</li>
-            </ul>
+          <!-- 📈 SVG 심전도 애니메이션 -->
+          <div class="h-12 w-full mb-5 relative overflow-hidden flex items-center opacity-80 border-b border-border/10">
+            <svg class="absolute w-[200%] h-full ecg-animate text-[#8b5cf6]" viewBox="0 0 200 100" preserveAspectRatio="none">
+              <path d="M0,50 L20,50 L25,30 L35,90 L45,10 L55,70 L60,50 L100,50 L120,50 L125,30 L135,90 L145,10 L155,70 L160,50 L200,50" 
+                    fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
           </div>
 
+          <!-- 📊 실시간 생체 데이터 리스트 -->
+          <ul class="text-xs space-y-3 opacity-90 flex-grow">
+            <li class="flex justify-between items-center">
+              <span class="opacity-50">TARGET:</span> 
+              <span class="text-foreground">Human_Neva</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span class="opacity-50">HEART_RATE:</span> 
+              <span class="text-[#8b5cf6] font-bold"><span id="bpm-value">58</span> bpm</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span class="opacity-50">O2_CONSUMPTION:</span> 
+              <span class="text-[#8b5cf6]"><span id="o2-value">45.2</span> L/h</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span class="opacity-50">CORE_TEMP:</span> 
+              <span class="text-foreground"><span id="temp-value">37.2</span> °C</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span class="opacity-50">CORTISOL_LVL:</span> 
+              <span class="text-foreground"><span id="cortisol-value">9.4</span> ㎍/dL</span>
+            </li>
+            <li class="flex justify-between items-center">
+              <span class="opacity-50">OXYTOCIN_LVL:</span> 
+              <span class="text-[#8b5cf6]"><span id="oxy-value">42</span> % <span class="text-[10px] animate-pulse opacity-70">(High)</span></span>
+            </li>
+          </ul>
+          <div class="mt-3 pt-3 border-t border-border/10 text-xs flex justify-between items-center">
+            <span class="opacity-50">PROSTHETIC_SYNC:</span> 
+            <span class="text-[#8b5cf6]">98.4%</span>
+          </div>
         </div>
 
-        <!-- ➡️ 우측 컬럼 (데스크톱 기준) -->
-        <div class="contents lg:flex lg:flex-col lg:w-2/3 lg:gap-6">
-          
-          <!-- [1] 메인 타이틀 & 환영 인사 -->
-          <div class="order-1 lg:order-none flex flex-col justify-center pb-2">
-            <p class="text-[#329852] text-xs tracking-widest mb-3 animate-pulse">ACCESS GRANTED</p>
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-5">MERGE CONFLICT</h1>
-            <p class="text-sm leading-relaxed break-keep max-w-xl opacity-80">
-              코모란트에 탑승하신 것을 환영합니다.<br/>
-              지각이 있는 인공 존재(ACE)와 강화 인간의 병합 데이터를 기록하고 있습니다.
-            </p>
+        <!-- [1] 메인 타이틀 & 환영 인사 (중앙+우측 상단, 가로 2칸 차지) -->
+        <div class="order-1 lg:order-none lg:col-start-2 lg:col-span-2 lg:row-start-1 flex flex-col items-center justify-center text-center p-6 md:p-8 border border-border/20 bg-card/30 rounded-xl shadow-sm">
+          <p class="text-[#8b5cf6] text-xs tracking-widest mb-3 animate-pulse">ACCESS GRANTED</p>
+          <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-5">MERGE CONFLICT</h1>
+          <p class="text-sm leading-relaxed break-keep max-w-xl opacity-80 mb-8">
+            코모란트에 탑승하신 것을 환영합니다.<br/>
+            지각이 있는 인공 존재(ACE)와 강화 인간의 병합 데이터를 기록하고 있습니다.
+          </p>
 
-            <!-- 통일된 게시판 이동 버튼 -->
-            <div class="flex flex-col sm:flex-row gap-3 mt-6">
-              <a href="/blog" class="flex-1 py-3 bg-[#329852]/10 border border-[#329852]/30 text-[#329852] hover:bg-[#329852]/20 hover:border-[#329852]/50 transition-all rounded text-center text-xs tracking-widest font-bold">
-                [ NOVELS ]
-              </a>
-              <a href="/gallery" class="flex-1 py-3 bg-[#329852]/10 border border-[#329852]/30 text-[#329852] hover:bg-[#329852]/20 hover:border-[#329852]/50 transition-all rounded text-center text-xs tracking-widest font-bold">
-                [ GALLERY ]
-              </a>
-            </div>
+          <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+            <a href="/blog" class="flex-1 py-3 bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 text-[#8b5cf6] hover:bg-[#8b5cf6]/20 hover:border-[#8b5cf6]/60 transition-all rounded text-center text-xs tracking-widest font-bold">
+              [ NOVELS ]
+            </a>
+            <a href="/gallery" class="flex-1 py-3 bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 text-[#8b5cf6] hover:bg-[#8b5cf6]/20 hover:border-[#8b5cf6]/60 transition-all rounded text-center text-xs tracking-widest font-bold">
+              [ GALLERY ]
+            </a>
           </div>
+        </div>
 
-          <!-- 하단 분할 영역 (작품소개 & 함선상태) -->
-          <div class="order-2 lg:order-none contents lg:flex lg:flex-row lg:gap-6 lg:mt-auto">
-            
-            <!-- [2] 가이드 및 트리거 워닝 -->
-            <div class="order-2 lg:order-none lg:w-[60%] flex flex-col justify-end pt-4 lg:pt-0">
-              <div class="space-y-2 text-xs opacity-80">
-                <p>> <strong>Novels:</strong> 오리지널 SF GL소설 연재 공간입니다.</p>
-                <p>> <strong>Gallery:</strong> 커미션을 포함한 시각 데이터가 올라옵니다.</p>
-              </div>
-              
-              <div class="p-4 mt-4 bg-background/50 border border-border/20 rounded">
-                <p class="text-[11px] opacity-60 leading-relaxed break-keep">
-                  <strong>TW:</strong> 성적 묘사, 폭력 및 신체 훼손, 범죄, 심리적 압박(감금, 가스라이팅, 정보 통제, 합의되지 않은 신체 접촉 및 감각 조작 등), 신체 제어 상실(조종, 익사 및 질식, 신체 개조, 수면 중 관계 등), 다인플, 인외와의 성관계(AI, 외계 생물), 약물 복용 - 각종 이상성욕이 혼재되어 있으니 열람에 주의하세요.
-                </p>
-              </div>
-            </div>
+        <!-- [3] BACKGROUND_TASKS (좌측 하단) -->
+        <div class="order-3 lg:order-none lg:col-start-1 lg:row-start-2 flex flex-col p-5 border border-border/20 bg-card/30 rounded-xl shadow-sm">
+          <h3 class="text-xs font-bold text-[#8b5cf6] tracking-widest border-b border-[#8b5cf6]/30 pb-2 mb-4">
+            [ BACKGROUND_TASKS ]
+          </h3>
+          <!-- 중간 항목들은 디자인(색상, 투명도)을 완전히 통일했습니다 -->
+          <ul class="text-[11px] md:text-xs leading-relaxed space-y-4 opacity-80 flex-grow">
+            <li class="line-through opacity-40">[✓] 제3 화물칸 대기 순환 필터 정화 완료</li>
+            <li>[▶] Human_Neva 샤워 모니터링 (예상: 운동 루틴 종료 후, 4시간 뒤)</li>
+            <li>[✓] Human_Cathode 온수 사용량 50% 제한 적용 (사유: 에너지 절약)</li>
+            <li>[▶] 주 엔진 냉각수 파이프라인 열화상 스캔 및 위상 보정</li>
+            <li>[▶] Human_Neva 수분 손실에 따른 맞춤형 전해질 음료 배합</li>
+            <li>[✓] Human_Cathode 생활구역B 출입 권한 박탈 (사유: 오염 및 소음 방지)</li>
+            <li class="text-orange-400/90 font-medium">[■] Human_Neva 골반 및 우측 의체 접합부 온열 마사지 모듈 (대기)</li>
+          </ul>
+        </div>
 
-            <!-- [5] 함선 및 보안 시스템 로그 -->
-            <div class="order-5 lg:order-none lg:w-[40%] p-5 bg-card/10 border border-border/20 rounded-lg text-xs flex flex-col justify-between mt-6 lg:mt-0">
-              <div>
-                <h4 class="font-bold text-[#329852] tracking-widest border-b border-[#329852]/30 pb-2 mb-3">
-                  [ VESSEL_STATUS ]
-                </h4>
-                <ul class="space-y-2 opacity-80">
-                  <li class="flex justify-between"><span>TYPE:</span> <span>Military Corvette</span></li>
-                  <li class="flex justify-between"><span>VELOCITY:</span> <span><span id="vel-value">0.00</span> km/s</span></li>
-                  <li class="flex justify-between"><span>POWER_LOAD:</span> <span><span id="power-value">12.4</span>%</span></li>
-                  <li class="flex justify-between"><span>HULL_INTG:</span> <span><span id="hull-value">98.2</span>%</span></li>
-                  <li class="flex justify-between"><span>O2_RESERVE:</span> <span><span id="o2res-value">84.1</span>%</span></li>
-                  <li class="flex justify-between"><span>EXT_TEMP:</span> <span>-270.0 °C</span></li>
-                </ul>
-                
-                <h4 class="font-bold text-red-500/90 tracking-widest border-b border-red-500/30 pb-2 mb-3 mt-5">
-                  [ SECURITY_ALERT ]
-                </h4>
-                <p class="text-red-500/90 animate-pulse">> UCACEAS_Protocol: OVERRIDDEN</p>
-              </div>
-            </div>
+        <!-- [2] 가이드 및 트리거 워닝 (중앙 하단) -->
+        <div class="order-2 lg:order-none lg:col-start-2 lg:row-start-2 flex flex-col p-5 border border-border/20 bg-card/30 rounded-xl shadow-sm">
+          <h3 class="text-xs font-bold text-[#8b5cf6] tracking-widest border-b border-[#8b5cf6]/30 pb-2 mb-4">
+            [ DIRECTORY_INFO ]
+          </h3>
+          <div class="space-y-3 text-xs opacity-80 flex-grow">
+            <p>> <strong>Novels:</strong> 오리지널 SF GL소설 연재 공간입니다.</p>
+            <p>> <strong>Gallery:</strong> 커미션을 포함한 시각 데이터가 올라옵니다.</p>
+            <p class="pt-2">> <strong>Notice:</strong> 모든 기록은 비인가 접근으로부터 보호됩니다.</p>
+          </div>
+          
+          <div class="p-4 mt-4 bg-background/50 border border-border/10 rounded">
+            <p class="text-[11px] text-muted-foreground opacity-70 leading-relaxed break-keep">
+              <strong>TW:</strong> 성적 묘사, 폭력 및 신체 훼손, 범죄, 심리적 압박(가스라이팅, 정보 통제, 합의되지 않은 신체 접촉 및 감각 조작 등), 신체 제어 상실(조종, 익사 및 질식, 신체 개조, 수면 중 관계 등), 다인플, 인외와의 성관계(AI, 외계 생물), 약물 복용 - 각종 이상성욕이 혼재되어 있으니 열람에 주의하세요.
+            </p>
+          </div>
+        </div>
 
+        <!-- [5] 함선 및 보안 시스템 로그 (우측 하단) -->
+        <div class="order-5 lg:order-none lg:col-start-3 lg:row-start-2 flex flex-col p-5 border border-border/20 bg-card/30 rounded-xl shadow-sm">
+          <h3 class="font-bold text-[#8b5cf6] text-xs tracking-widest border-b border-[#8b5cf6]/30 pb-2 mb-4">
+            [ VESSEL_STATUS ]
+          </h3>
+          <ul class="text-xs space-y-3 opacity-80 flex-grow">
+            <!-- 요청하신 퇴역 군함 암시 텍스트로 교체 -->
+            <li class="flex justify-between">
+              <span class="opacity-50">CLASS:</span> 
+              <span class="text-foreground">Corvette <span class="text-xs opacity-60">[RETIRED]</span></span>
+            </li>
+            <li class="flex justify-between">
+              <span class="opacity-50">VELOCITY:</span> 
+              <span><span id="vel-value">0.00</span> km/s</span>
+            </li>
+            <li class="flex justify-between">
+              <span class="opacity-50">POWER_LOAD:</span> 
+              <span><span id="power-value">12.4</span>%</span>
+            </li>
+            <li class="flex justify-between">
+              <span class="opacity-50">HULL_INTG:</span> 
+              <span class="text-[#8b5cf6]"><span id="hull-value">98.2</span>%</span>
+            </li>
+            <li class="flex justify-between">
+              <span class="opacity-50">O2_RESERVE:</span> 
+              <span><span id="o2res-value">84.1</span>%</span>
+            </li>
+            <li class="flex justify-between">
+              <span class="opacity-50">RAD_LEVEL:</span> 
+              <span><span id="rad-value">0.02</span> mSv</span>
+            </li>
+            <li class="flex justify-between">
+              <span class="opacity-50">EXT_TEMP:</span> 
+              <span>-270.0 °C</span>
+            </li>
+          </ul>
+          
+          <div class="mt-4 pt-4 border-t border-border/10">
+            <h4 class="font-bold text-red-500/80 text-xs tracking-widest mb-2">
+              [ SECURITY_ALERT ]
+            </h4>
+            <p class="text-[11px] text-red-500/80 animate-pulse">> UCACEAS_Protocol: OVERRIDDEN</p>
           </div>
         </div>
 
@@ -165,6 +177,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       power: document.getElementById('power-value'),
       hull: document.getElementById('hull-value'),
       o2res: document.getElementById('o2res-value'),
+      rad: document.getElementById('rad-value'),
     };
 
     if(els.bpm) {
@@ -176,12 +189,13 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
         els.cortisol.innerText = (Math.random() * (12.0 - 8.0) + 8.0).toFixed(1);
         els.oxy.innerText = Math.floor(Math.random() * (65 - 40 + 1)) + 40;
         
-        // 함선 상태 데이터 갱신 (미세한 변동)
+        // 함선 상태 데이터 갱신 (미세한 변동으로 빈 공간 채우기)
         if(els.vel) {
           els.vel.innerText = (Math.random() * 0.01).toFixed(2);
           els.power.innerText = (Math.random() * (12.5 - 12.0) + 12.0).toFixed(1);
           els.hull.innerText = (Math.random() * (98.3 - 98.1) + 98.1).toFixed(1);
           els.o2res.innerText = (Math.random() * (84.5 - 84.1) + 84.1).toFixed(1);
+          els.rad.innerText = (Math.random() * (0.03 - 0.01) + 0.01).toFixed(2);
         }
       }, 2000);
     }
