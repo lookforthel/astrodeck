@@ -18,17 +18,95 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       <!-- 📱 내부 콘텐츠 그리드 (모바일: 1열, 데스크톱: 3열) -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 relative z-10">
         
-        <!-- ⬅️ 좌측 패널 (시스템 로그 & 상태) -->
-        <div class="col-span-1 flex flex-col gap-6 order-2 lg:order-1">
-          <!-- 바이오 싱크 블록 -->
-          <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
-            <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BIO_SYNC : ACTIVE ]</h3>
-            <ul class="text-sm space-y-2 text-foreground/80">
-              <li class="flex justify-between"><span>TARGET:</span> <span>Neva_West</span></li>
-              <li class="flex justify-between"><span>HR_STATUS:</span> <span class="text-green-500/80 animate-pulse">Stable</span></li>
-              <li class="flex justify-between"><span>NEURAL_LINK:</span> <span>Merged</span></li>
-            </ul>
-          </div>
+        <!-- ⬅️ 좌측 패널 (실시간 생체 데이터 & 움직이는 그래프) -->
+<div class="col-span-1 flex flex-col gap-6 order-2 lg:order-1">
+  
+  <div class="p-4 border border-border/30 bg-background/40 rounded-lg overflow-hidden relative group">
+    <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BIO_SYNC : ACTIVE ]</h3>
+    
+    <!-- 📈 실시간 파동 그래프 애니메이션 -->
+    <div class="h-16 w-full mb-4 relative overflow-hidden flex items-end gap-1 opacity-70" id="live-graph">
+      <!-- JS로 막대들이 동적으로 생성되어 심박수 파형처럼 움직입니다 -->
+    </div>
+
+    <!-- 📊 실시간 변동 데이터 리스트 -->
+    <ul class="text-[13px] space-y-2 text-foreground/80 font-mono">
+      <li class="flex justify-between items-center">
+        <span class="opacity-70">TARGET:</span> 
+        <span>Neva_West</span>
+      </li>
+      <li class="flex justify-between items-center">
+        <span class="opacity-70">HEART_RATE:</span> 
+        <span class="text-green-400 font-bold"><span id="bpm-value">72</span> bpm</span>
+      </li>
+      <li class="flex justify-between items-center">
+        <span class="opacity-70">OXYTOCIN_LVL:</span> 
+        <span class="text-primary"><span id="oxy-value">42</span>%</span>
+      </li>
+      <li class="flex justify-between items-center">
+        <span class="opacity-70">PUPIL_DILATION:</span> 
+        <span><span id="pupil-value">12</span>% <span class="text-[10px] text-red-400 animate-pulse">(Gazing)</span></span>
+      </li>
+      <li class="flex justify-between items-center">
+        <span class="opacity-70">LIP_BITING_FREQ:</span> 
+        <span id="lip-value">6 / hr</span>
+      </li>
+      <li class="flex justify-between items-center">
+        <span class="opacity-70">PROSTHETIC_SYNC:</span> 
+        <span class="text-green-500">98.4%</span>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- 백그라운드 태스크 블록 (기존과 동일) -->
+  <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
+    <!-- ... 기존 백그라운드 태스크 코드 ... -->
+  </div>
+</div>
+
+<script>
+  // 클라이언트 사이드 스크립트: 숫자를 실시간으로 변경하고 그래프를 그립니다.
+  document.addEventListener('astro:page-load', () => {
+    // 1. 숫자 랜덤 업데이트
+    const bpmEl = document.getElementById('bpm-value');
+    const oxyEl = document.getElementById('oxy-value');
+    const pupilEl = document.getElementById('pupil-value');
+
+    if(bpmEl && oxyEl && pupilEl) {
+      setInterval(() => {
+        // 심박수: 68 ~ 85 사이 변동
+        bpmEl.innerText = Math.floor(Math.random() * (85 - 68 + 1)) + 68;
+        // 옥시토신: 40 ~ 60 사이 변동
+        oxyEl.innerText = Math.floor(Math.random() * (60 - 40 + 1)) + 40;
+        // 동공 확장: 10 ~ 15 사이 변동
+        pupilEl.innerText = Math.floor(Math.random() * (15 - 10 + 1)) + 10;
+      }, 2000); // 2초마다 갱신
+    }
+
+    // 2. 동적 파형 그래프 생성 (이퀄라이저 스타일)
+    const graphContainer = document.getElementById('live-graph');
+    if (graphContainer) {
+      graphContainer.innerHTML = ''; // 초기화
+      const barCount = 30; // 막대 개수
+      
+      for (let i = 0; i < barCount; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'w-full bg-primary/40 rounded-t-sm';
+        // 애니메이션 딜레이를 다르게 주어 파도치는 느낌 연출
+        bar.style.animation = `bounce ${0.5 + Math.random()}s infinite alternate ease-in-out`;
+        bar.style.height = `${Math.floor(Math.random() * 80) + 10}%`;
+        graphContainer.appendChild(bar);
+      }
+    }
+  });
+</script>
+
+<style>
+  @keyframes bounce {
+    0% { height: 10%; background-color: rgba(0, 255, 255, 0.2); }
+    100% { height: 90%; background-color: rgba(0, 255, 255, 0.8); }
+  }
+</style>
           
           <!-- 백그라운드 태스크 블록 -->
           <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
