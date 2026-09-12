@@ -123,12 +123,15 @@ galleryItems.sort(() => Math.random() - 0.5);
                   </span>
                 )}
               </div>
-            {item.comment && (
+              
+              <!-- 하단: 코멘트 -->
+              {item.comment && (
                 <p class="text-[13px] text-muted-foreground/80 leading-relaxed break-keep mt-0.5">
                   {item.comment}
                 </p>
               )}
-
+            </div> <!-- 👈 (추가됨) 텍스트 캡션 영역 닫기 -->
+          </div> <!-- 👈 (추가됨) 카드 하나 전체 닫기 -->
         ))}
       </div>
     )}
@@ -143,7 +146,6 @@ galleryItems.sort(() => Math.random() - 0.5);
   </div>
 
 </BaseLayout>
-
 <script>
   document.addEventListener('astro:page-load', () => {
     const images = document.querySelectorAll('.gallery-img');
