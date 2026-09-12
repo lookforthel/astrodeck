@@ -1,161 +1,269 @@
----
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Hero from '@/components/sections/Hero.astro';
-import LogoCloud from '@/components/sections/LogoCloud.astro';
-import Features from '@/components/sections/Features.astro';
-import AIFeature from '@/components/sections/AIFeature.astro';
-import Stats from '@/components/sections/Stats.astro';
-import FAQ from '@/components/sections/FAQ.astro';
+<!-- HTML 구조 -->
+<div class="hud-container">
+  
+  <!-- 배경 글리치 효과 -->
+  <div class="hud-glitch-bg"></div>
 
-const features = [
-  {
-    title: 'For Real Websites',
-    description:
-      'Company sites, blogs, portfolios, landing pages — with working example pages for each. Deliberately not built for dashboards or app-heavy products.',
-    icon: 'globe',
-  },
-  {
-    title: 'AI Guardrails Built In',
-    description:
-      'A convention guard hook blocks off-system edits — hardcoded colors, deprecated patterns — before they ever reach your code.',
-    icon: 'shield',
-  },
-  {
-    title: 'One Design System',
-    description:
-      'OKLCH color tokens, spacing, and typography defined once. Dark mode included — and your AI assistant cannot break it.',
-    icon: 'chart',
-  },
-  {
-    title: 'Docs for Humans & AI',
-    description:
-      'Every task is documented two ways: tell your coding assistant what you want, or follow the manual steps yourself.',
-    icon: 'users',
-  },
-  {
-    title: 'Quality Checks in One Command',
-    description:
-      'npm run check:kpis verifies colors, alt texts, meta descriptions, and deprecated imports. Lighthouse scores of 99-100 out of the box.',
-    icon: 'lock',
-  },
-  {
-    title: 'Astro Performance',
-    description:
-      'Static HTML with islands architecture: fast loads, clean SEO, sitemap and RSS included — what content sites actually need.',
-    icon: 'zap',
-  },
-];
-
-const faqs = [
-  {
-    question: 'Is AstroDeck free?',
-    answer:
-      'Yes. AstroDeck is MIT-licensed and completely free — for personal and commercial projects, forever.',
-  },
-  {
-    question: 'What kind of websites is it for?',
-    answer:
-      'Company and marketing sites, blogs and editorial sites, portfolios, and landing pages. It is deliberately not built for dashboards or app-heavy products.',
-  },
-  {
-    question: 'Which AI tools does it work with?',
-    answer:
-      'Any tool that supports the AGENTS.md standard: Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, Windsurf, Zed, Aider, and more. Claude Code gets the deepest integration — a dedicated agent, domain skills, slash commands, and the convention guard hook.',
-  },
-  {
-    question: 'Can I use it without AI?',
-    answer:
-      'Absolutely. AstroDeck is a normal, well-documented Astro starter kit. Every task in the docs is shown two ways: with AI and manually.',
-  },
-  {
-    question: 'Do I need to know Astro?',
-    answer:
-      'It helps, but it is not required. If you work with an AI assistant, it knows the conventions from AGENTS.md and does the heavy lifting. If you prefer to code yourself, the docs walk you through every task.',
-  },
-  {
-    question: 'How opinionated is it?',
-    answer:
-      'There is one design-token system (OKLCH colors, spacing, typography) and a set of conventions — that is what keeps AI output consistent. Everything is overridable: your own rules go in PROJECT.md, your own brand goes in globals.css or a DESIGN.md.',
-  },
-];
----
-
-<BaseLayout
-  title="Astro Starter Kit for AI-Assisted Websites"
-  description="Open-source Astro starter kit for AI-assisted websites. Build company sites, blogs, and portfolios with Claude Code, Cursor & Co. on guarded design rails."
->
-  <Hero
-    badge="true"
-    title="The starter kit for AI-assisted websites."
-    subtitle="Start from a complete foundation — pages, sections, and a design system — and let <mark>Claude Code, Cursor, or any coding agent</mark> build your <mark>company site, blog, or portfolio</mark>. Conventions via <mark>AGENTS.md</mark>, enforced by <mark>built-in guardrails</mark>, so AI edits never go off-system."
-    prompt="Clone https://github.com/holger1411/astrodeck as the foundation for my new website. Install the dependencies, read AGENTS.md, start the dev server, and give me a short tour of the project."
-    primaryCta={{
-      href: 'https://github.com/holger1411/astrodeck/releases/latest',
-      label: 'Download',
-    }}
-    secondaryCta={{ href: 'https://github.com/holger1411/astrodeck', label: 'GitHub' }}
-  />
-
-  <LogoCloud />
-
-  <AIFeature />
-
-  <div class="section-inverted py-8">
-    <Stats
-      stats={[
-        { value: '16', label: 'Sections', description: 'Hero, pricing, FAQ, team & more' },
-        { value: '11', label: 'UI Components', description: 'shadcn/ui + Radix' },
-        { value: '11', label: 'Example Pages', description: 'SaaS, portfolio, blog & more' },
-        { value: '100', label: 'Lighthouse', description: 'Accessibility, Best Practices & SEO' },
-      ]}
-    />
+  <!-- 좌측 패널: 네바 생체 신호 모니터링 (파동) -->
+  <div class="panel left-panel">
+    <div class="panel-header">[ BIO_SYNC: Neva_West ]</div>
+    
+    <div class="wave-container">
+      <div class="wave-line wave-neva"></div>
+      <div class="wave-line wave-marie"></div>
+      <!-- 두 파동이 겹칠 때마다 노이즈 발생 -->
+      <div class="merge-conflict-warning">MERGE CONFLICT DETECTED</div>
+    </div>
+    
+    <div class="data-block">
+      <p>HR: <span class="blink">72 bpm</span> (Stable)</p>
+      <p>Temp: 36.8°C</p>
+      <p>Cortisol: <span class="text-alert">Elevated</span></p>
+      <p>Neural_Link: <span class="text-green">Standby (Airgap)</span></p>
+    </div>
+    
+    <div class="nav-links mt-4">
+      <p class="text-xs text-gray-500 mb-1">// ACCESS_LOG</p>
+      <a href="/novels" class="hud-btn">> [READ_NOVELS]</a>
+      <a href="/gallery" class="hud-btn">> [VIEW_ARCHIVE]</a>
+    </div>
   </div>
 
-  <Features
-    title="More than a theme, calmer than an AI builder"
-    subtitle="A complete website foundation — plus the operating layer your AI assistant needs to stay on track."
-    features={features}
-  />
-
-  <div class="bg-muted/30">
-    <FAQ
-      title="Frequently asked questions"
-      subtitle="The short version of everything you might want to know."
-      faqs={faqs}
-    />
+  <!-- 중앙: 메인 시야 (여백) & 타겟팅 -->
+  <div class="center-view">
+    <div class="targeting-reticle">
+      <div class="crosshair"></div>
+      <div class="reticle-text">TARGET_LOCKED</div>
+    </div>
   </div>
 
-  <div class="section-inverted">
-    <section class="py-20 md:py-32 px-6">
-      <div class="container max-w-3xl mx-auto text-center" data-animate="scale">
-        <h2 class="text-3xl font-bold leading-tight md:text-5xl">Start from a clean foundation.</h2>
-        <p class="mt-6 text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-          Download AstroDeck, open it in your coding assistant, and say what you want to build. Free
-          and open source — forever.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 mt-10 justify-center">
-          <a
-            href="https://github.com/holger1411/astrodeck/releases/latest"
-            class="group relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 h-12 px-12 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 overflow-hidden"
-          >
-            <span
-              class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
-              aria-hidden="true"></span>
-            <span
-              class="relative z-10 inline-block transition-transform duration-300 group-hover:translate-x-0.5"
-              >Download</span
-            >
-          </a>
-          <a
-            href="https://github.com/holger1411/astrodeck"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-12 px-8"
-          >
-            GitHub
-          </a>
-        </div>
+  <!-- 우측 패널: 백그라운드 태스크 및 시스템 로그 -->
+  <div class="panel right-panel">
+    <div class="panel-header">[ BACKGROUND_TASKS ]</div>
+    
+    <ul class="task-list">
+      <li class="task-done">[✓] 함선 블랙박스 교체 및 도색 세탁</li>
+      <li class="task-done">[✓] 식품 재조합기 레시피 업데이트 (버전 48)</li>
+      <li class="task-active">[▶] 네바 호르몬 사이클 및 수면 패턴 분석 중...</li>
+      <li class="task-active">[▶] 에우린 메인 서버 양자 해킹 시나리오 대기 중...</li>
+      <li class="task-wait">[■] 캐스 제거 조건 재계산 (현재 조건 충족: 1/5)</li>
+    </ul>
+
+    <div class="terminal-log mt-4">
+      <p class="text-xs text-gray-500 mb-1">// SYSTEM_LOG</p>
+      <div class="typewriter-text">
+        <p>> Warning: Unregistered access detected.</p>
+        <p>> Bypassing security protocol...</p>
+        <p>> <span class="text-alert">"네바가 좋아하는 걸 저만 놓치면 손해잖아요."</span></p>
       </div>
-    </section>
+    </div>
+    
+    <div class="copyright-info mt-4 text-xs text-gray-600">
+      <p>ALL DATA ENCRYPTED & CLASSIFIED</p>
+      <p>UNAUTHORIZED ACCESS WILL BE TERMINATED</p>
+      <p>&copy; 2026 Merge Conflict. All rights reserved.</p>
+    </div>
   </div>
-</BaseLayout>
+
+</div>
+
+<style>
+/* CSS 스타일링 (Tailwind CSS와 병행 사용 가능) */
+:root {
+  --hud-color: #0ff; /* 청록색 (마리) */
+  --alert-color: #f00; /* 붉은색 (경고/네바) */
+  --bg-dark: #050505;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--hud-color);
+  font-family: 'Courier New', Courier, monospace; /* 터미널 폰트 */
+  margin: 0;
+  overflow: hidden; /* 스크롤 방지하여 헬멧 뷰 느낌 강조 */
+}
+
+.hud-container {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  /* 브라운관 느낌의 스캔라인 효과 */
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
+}
+
+.panel {
+  width: 25%;
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  font-weight: bold;
+  border-bottom: 1px solid var(--hud-color);
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+}
+
+/* 파동 애니메이션 (네바와 마리의 융합) */
+.wave-container {
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+.wave-line {
+  position: absolute;
+  top: 50%;
+  width: 200%;
+  height: 2px;
+  opacity: 0.7;
+}
+
+.wave-neva {
+  background-color: var(--alert-color);
+  /* 사인파 형태를 CSS로 근사하거나 SVG 사용 권장 */
+  animation: waveMove 3s infinite linear, glitch 5s infinite; 
+}
+
+.wave-marie {
+  background-color: var(--hud-color);
+  animation: waveMove 4s infinite linear reverse;
+}
+
+.merge-conflict-warning {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--alert-color);
+  font-weight: bold;
+  font-size: 0.8rem;
+  opacity: 0;
+  animation: flash 4s infinite;
+}
+
+/* 데이터 블록 및 리스트 */
+.data-block p, .task-list li {
+  margin: 5px 0;
+  font-size: 0.9rem;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-done { color: rgba(0, 255, 255, 0.5); text-decoration: line-through; }
+.task-active { color: #fff; text-shadow: 0 0 5px var(--hud-color); }
+.task-wait { color: gray; }
+
+.text-alert { color: var(--alert-color); }
+.text-green { color: #0f0; }
+.blink { animation: blinker 1s linear infinite; }
+
+/* 중앙 타겟팅 UI */
+.center-view {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.targeting-reticle {
+  width: 300px;
+  height: 300px;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 50%;
+  position: relative;
+  animation: rotateSlow 20s infinite linear;
+}
+
+.crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--hud-color);
+  transform: translate(-50%, -50%);
+}
+.crosshair::before, .crosshair::after {
+    content:'';
+    position: absolute;
+    background: var(--hud-color);
+}
+.crosshair::before { top: 50%; left: -10px; right: -10px; height: 1px; }
+.crosshair::after { left: 50%; top: -10px; bottom: -10px; width: 1px; }
+
+
+.reticle-text {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  animation: blinker 2s infinite;
+}
+
+/* 버튼 및 링크 */
+.hud-btn {
+  display: block;
+  color: var(--hud-color);
+  text-decoration: none;
+  margin: 5px 0;
+  padding: 5px;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+}
+
+.hud-btn:hover {
+  background-color: rgba(0, 255, 255, 0.2);
+  border: 1px solid var(--hud-color);
+  padding-left: 10px; /* 호버 시 화살표 이동 효과 */
+}
+
+/* 타이핑 효과 */
+.typewriter-text p {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid var(--hud-color); /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+/* Animations */
+@keyframes blinker { 50% { opacity: 0; } }
+@keyframes flash { 0%, 90% { opacity: 0; } 95% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes rotateSlow { 100% { transform: rotate(360deg); } }
+@keyframes waveMove { 100% { transform: translateX(-50%); } }
+@keyframes glitch {
+  2%, 64% { transform: translate(2px,0) skew(0deg); }
+  4%, 60% { transform: translate(-2px,0) skew(0deg); }
+  62% { transform: translate(0,0) skew(5deg); }
+}
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--hud-color); }
+}
+
+</style>
