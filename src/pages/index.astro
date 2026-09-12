@@ -93,21 +93,26 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
             </p>
           </div>
 
-          <!-- 빠른 이동 버튼 영역 -->
+          <!-- 빠른 이동 버튼 영역 (디자인 통일) -->
           <div class="flex flex-col sm:flex-row gap-4 mt-4">
-            <a href="/blog" class="px-6 py-3 bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50 transition-all rounded-md text-center text-sm tracking-widest font-bold">
+            <a href="/blog" class="flex-1 px-6 py-3 bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50 transition-all rounded-md text-center text-sm tracking-widest font-bold">
               [ ACCESS_NOVELS ]
             </a>
-            <a href="/gallery" class="px-6 py-3 bg-card border border-border/50 hover:border-foreground/50 transition-all rounded-md text-center text-sm tracking-widest text-muted-foreground hover:text-foreground">
+            <a href="/gallery" class="flex-1 px-6 py-3 bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50 transition-all rounded-md text-center text-sm tracking-widest font-bold">
               [ VIEW_GALLERY ]
             </a>
           </div>
 
-          <!-- 사이트 이용 안내 -->
-          <div class="mt-12 pt-6 border-t border-border/20 text-xs text-muted-foreground space-y-2">
-            <p>> <strong>Novels:</strong> 오리지널 SF GL소설 연재 공간입니다. (※ 청소년 이용불가)</p>
-            <p>> <strong>Gallery:</strong> 커미션을 포함한 시각 데이터가 올라옵니다.</p>
-            <p class="opacity-60 pt-2">© 2026 둑중개.</p>
+          <!-- 사이트 이용 안내 및 트리거 워닝 -->
+          <div class="mt-12 pt-6 border-t border-border/20 text-xs text-muted-foreground space-y-3">
+            <p>> <strong>Novels:</strong> 오리지널 SF 소설 연재 공간입니다.</p>
+            <p>> <strong>Gallery:</strong> 커미션 및 스케치 시각 데이터가 자동 분류됩니다.</p>
+            
+            <div class="p-3 mt-4 bg-background/50 border border-border/10 rounded">
+              <p class="opacity-60 leading-relaxed">
+                <strong>TW:</strong> 성적 묘사, 폭력 및 신체 훼손, 비윤리적 행위 및 심리적 압박(가스라이팅, 정보 통제, 합의되지 않은 신체 접촉 및 감각 조작 등), 신체 제어 상실(익사 및 질식, 신체 개조, 수면 중 관계 등), 다인플, 인외와의 성관계(AI, 외계 생물), 약물 복용 - 각종 이상성욕이 혼재되어있으니 열람에 주의하세요
+              </p>
+            </div>
           </div>
 
         </div>
