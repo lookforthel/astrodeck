@@ -7,21 +7,20 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex items-center justify-center min-h-[80vh]">
     
     <!-- 🔲 메인 HUD 박스 -->
-    <div class="relative w-full bg-card/5 border border-primary/20 rounded-xl p-6 md:p-12 font-mono shadow-2xl backdrop-blur-sm overflow-hidden group">
+    <div class="relative w-full bg-card/5 border border-primary/20 rounded-xl p-6 md:p-12 font-mono shadow-2xl backdrop-blur-sm group">
       
-      <!-- ✨ 구석 애니메이션 (조준경 마커) -->
-      <div class="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
-      <div class="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
-      <div class="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
-      <div class="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
+      <!-- ✨ 구석 조준경 애니메이션 (명시적 컬러 및 펄스 효과 적용) -->
+      <div class="absolute top-4 left-4 w-5 h-5 border-t-2 border-l-2 border-[#329852] animate-hud-corner"></div>
+      <div class="absolute top-4 right-4 w-5 h-5 border-t-2 border-r-2 border-[#329852] animate-hud-corner" style="animation-delay: 0.5s;"></div>
+      <div class="absolute bottom-4 left-4 w-5 h-5 border-b-2 border-l-2 border-[#329852] animate-hud-corner" style="animation-delay: 1s;"></div>
+      <div class="absolute bottom-4 right-4 w-5 h-5 border-b-2 border-r-2 border-[#329852] animate-hud-corner" style="animation-delay: 1.5s;"></div>
 
-      <!-- 📱 내부 콘텐츠 그리드 -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 relative z-10">
+      <!-- 📱 4분할 그리드 (모바일: 1열, 데스크톱: 2x2 그리드) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-x-8 gap-y-8 relative z-10">
         
-        <!-- ⬅️ 좌측 패널 (실시간 생체/호르몬 데이터 & 심전도) -->
-        <div class="col-span-1 flex flex-col gap-6 order-2 lg:order-1">
-          
-          <div class="p-4 border border-border/30 bg-background/40 rounded-lg overflow-hidden relative group">
+        <!-- 1사분면 (좌측 상단): BIO_SYNC -->
+        <div class="col-span-1 lg:col-span-4 flex flex-col justify-end">
+          <div class="p-4 border border-border/30 bg-background/40 rounded-lg overflow-hidden relative">
             <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BIO_SYNC : ACTIVE ]</h3>
             
             <!-- 📈 SVG 심전도 애니메이션 -->
@@ -64,27 +63,11 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
               </li>
             </ul>
           </div>
-          
-          <!-- 백그라운드 태스크 블록 -->
-          <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
-            <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BACKGROUND_TASKS ]</h3>
-            <ul class="text-[11px] leading-relaxed space-y-3 text-muted-foreground font-mono">
-              <li class="line-through opacity-40">[✓] 제3 화물칸 대기 순환 필터 미세먼지 정화</li>
-              <li class="text-foreground/90">[▶] Human_Neva 샤워 모니터링 (예상: 운동 루틴 종료 후, 4시간 뒤)</li>
-              <li>[✓] Human_Cathode 온수 사용량 50% 제한 (사유: 에너지 절약)</li>
-              <li>[▶] 주 엔진 냉각수 파이프라인 열화상 스캔 및 위상 보정</li>
-              <li class="text-foreground/90">[▶] Human_Neva 수분 손실에 따른 맞춤형 전해질 음료 배합</li>
-              <li>[✓] Human_Cathode 생활구역B 출입 권한 박탈 (사유: 오염 및 소음 방지)</li>
-              <li class="text-orange-400/80">[■] Human_Neva 가슴 근육통 방지 온열 마사지 모듈 (대기)</li>
-            </ul>
-          </div>
-
         </div>
 
-        <!-- 🎯 중앙 패널 (메인 타이틀 & 환영 인사) -->
-        <div class="col-span-1 lg:col-span-2 flex flex-col justify-center order-1 lg:order-2">
-          
-          <div class="mb-8">
+        <!-- 2사분면 (우측 상단): 타이틀 및 네비게이션 -->
+        <div class="col-span-1 lg:col-span-8 flex flex-col justify-end pb-2">
+          <div class="mb-6">
             <p class="text-primary/80 text-sm tracking-widest mb-2">ACCESS GRANTED</p>
             <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">MERGE CONFLICT</h1>
             <p class="text-muted-foreground leading-relaxed break-keep max-w-xl">
@@ -93,8 +76,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
             </p>
           </div>
 
-          <!-- 빠른 이동 버튼 영역 (디자인 통일) -->
-          <div class="flex flex-col sm:flex-row gap-4 mt-4">
+          <div class="flex flex-col sm:flex-row gap-4">
             <a href="/blog" class="flex-1 px-6 py-3 bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50 transition-all rounded-md text-center text-sm tracking-widest font-bold">
               [ NOVELS ]
             </a>
@@ -102,19 +84,56 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
               [ GALLERY ]
             </a>
           </div>
+        </div>
 
-          <!-- 사이트 이용 안내 및 트리거 워닝 -->
-          <div class="mt-12 pt-6 border-t border-border/20 text-xs text-muted-foreground space-y-3">
-            <p>> <strong>Novels:</strong> 오리지널 SF GL소설 연재 공간입니다.</p>
-            <p>> <strong>Gallery:</strong> 커미션을 포함한 시각 데이터가 올라옵니다.</p>
-            
-            <div class="p-3 mt-4 bg-background/50 border border-border/10 rounded">
-              <p class="opacity-60 leading-relaxed">
-                <strong>TW:</strong> 성적 묘사, 폭력 및 신체 훼손, 비윤리적 행위 및 심리적 압박(가스라이팅, 정보 통제, 합의되지 않은 신체 접촉 및 감각 조작 등), 신체 제어 상실(익사 및 질식, 신체 개조, 수면 중 관계 등), 다인플, 인외와의 성관계(AI, 외계 생물), 약물 복용 - 각종 이상성욕이 혼재되어있으니 열람에 주의하세요
-              </p>
-            </div>
+        <!-- 3사분면 (좌측 하단): BACKGROUND_TASKS -->
+        <div class="col-span-1 lg:col-span-4">
+          <div class="p-4 border border-border/30 bg-background/40 rounded-lg h-full">
+            <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BACKGROUND_TASKS ]</h3>
+            <ul class="text-[11px] leading-relaxed space-y-3 text-muted-foreground font-mono">
+              <li class="line-through opacity-40">[✓] 제3 화물칸 대기 순환 필터 미세먼지 정화</li>
+              <li class="text-foreground/90">[▶] Human_Neva 샤워 모니터링 (예상: 운동 루틴 종료 후, 약 4시간 뒤)</li>
+              <li>[✓] Human_Cathode 온수 사용량 50% 제한 (사유: 에너지 절약)</li>
+              <li>[▶] 주 엔진 냉각수 파이프라인 열화상 스캔 및 위상 보정</li>
+              <li class="text-foreground/90">[▶] Human_Neva 수분 손실에 따른 맞춤형 전해질 음료 배합</li>
+              <li>[✓] Human_Cathode 생활구역B 출입 권한 박탈 (사유: 오염 및 소음 방지)</li>
+              <li class="text-orange-400/80">[■] Human_Neva 가슴 근육통 방지 온열 마사지 모듈 (대기)</li>
+            </ul>
           </div>
+        </div>
 
+        <!-- 4사분면 (우측 하단): 사이트 안내, 트리거 워닝, 시스템 상태 -->
+        <div class="col-span-1 lg:col-span-8 border-t border-border/20 pt-6">
+          <div class="flex flex-col lg:flex-row gap-6">
+            
+            <!-- 좌측: 가이드 및 트리거 워닝 -->
+            <div class="flex-1 space-y-3">
+              <p class="text-sm text-foreground/90">> <strong>Novels:</strong> 오리지널 SF GL소설 연재 공간입니다.</p>
+              <p class="text-sm text-foreground/90">> <strong>Gallery:</strong> 커미션을 포함한 시각 데이터가 올라옵니다.</p>
+              
+              <div class="p-3 mt-4 bg-background/50 border border-border/10 rounded">
+                <p class="text-xs text-muted-foreground opacity-80 leading-relaxed">
+                  <strong>TW:</strong> 성적 묘사, 폭력 및 신체 훼손, 비윤리적 행위 및 심리적 압박(가스라이팅, 정보 통제, 합의되지 않은 신체 접촉 및 감각 조작 등), 신체 제어 상실(익사 및 질식, 신체 개조, 수면 중 관계 등), 다인플, 인외와의 성관계(AI, 외계 생물), 약물 복용 - 각종 이상성욕이 혼재되어있으니 열람에 주의하세요
+                </p>
+              </div>
+            </div>
+
+            <!-- 우측: 함선 및 보안 시스템 로그 -->
+            <div class="w-full lg:w-1/3 bg-background/30 border border-border/20 p-4 rounded text-xs text-muted-foreground font-mono flex flex-col justify-between">
+              <div>
+                <h4 class="text-[#329852] font-bold border-b border-border/20 pb-1 mb-2">[ VESSEL_STATUS ]</h4>
+                <p class="mb-1">LOC: Deep_Space (Scrap-Reef)</p>
+                <p class="mb-1">VELOCITY: 0.00 km/s</p>
+                <p class="mb-3">EXT_TEMP: -270°C</p>
+                
+                <h4 class="text-red-400/90 font-bold border-b border-border/20 pb-1 mb-2 mt-4">[ SECURITY_ALERT ]</h4>
+                <p class="text-red-400/80 mb-1 animate-pulse">UCACEAS_Protocol: OVERRIDDEN</p>
+                <p>Airgap_Partition: MANUAL_OPEN</p>
+              </div>
+              <p class="opacity-50 mt-4 text-[10px] text-right">© 2026 둑중개</p>
+            </div>
+
+          </div>
         </div>
 
       </div>
@@ -134,18 +153,12 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
     if(bpmEl && o2El && tempEl && cortisolEl && oxyEl && pupilEl) {
       setInterval(() => {
-        // 강화 심장: 55 ~ 65 사이의 묵직한 박동
         bpmEl.innerText = Math.floor(Math.random() * (65 - 55 + 1)) + 55;
-        // 산소 소모량: 45.0 ~ 48.0 L/h
         o2El.innerText = (Math.random() * (48.0 - 45.0) + 45.0).toFixed(1);
-        // 체온: 37.0 ~ 37.5 사이
         tempEl.innerText = (Math.random() * (37.5 - 37.0) + 37.0).toFixed(1);
-        // 코르티솔: 8.0 ~ 12.0 (스트레스 수치 낮음 = 안정된 상태)
         cortisolEl.innerText = (Math.random() * (12.0 - 8.0) + 8.0).toFixed(1);
-        // 옥시토신: 40 ~ 65% (애착 호르몬 활성화 상태)
         oxyEl.innerText = Math.floor(Math.random() * (65 - 40 + 1)) + 40;
-        // 동공 확장: 10 ~ 15
-        pupilEl.innerText = Math.floor(Math.random() * (15 - 10 + 1)) + 10;
+        if(pupilEl) pupilEl.innerText = Math.floor(Math.random() * (15 - 10 + 1)) + 10;
       }, 2000);
     }
   });
@@ -158,5 +171,20 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   @keyframes ecgSlide {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
+  }
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+  }
+  /* 조준경 점멸 애니메이션 */
+  .animate-hud-corner {
+    animation: hud-corner-glow 4s ease-in-out infinite;
+  }
+  @keyframes hud-corner-glow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); border-color: #329852; }
   }
 </style>
