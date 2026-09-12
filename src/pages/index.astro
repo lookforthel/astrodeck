@@ -1,269 +1,90 @@
-<!-- HTML 구조 -->
-<div class="hud-container">
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Merge Conflict" description="개인 아카이브 및 소설 연재처">
   
-  <!-- 배경 글리치 효과 -->
-  <div class="hud-glitch-bg"></div>
-
-  <!-- 좌측 패널: 네바 생체 신호 모니터링 (파동) -->
-  <div class="panel left-panel">
-    <div class="panel-header">[ BIO_SYNC: Neva_West ]</div>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex items-center justify-center min-h-[80vh]">
     
-    <div class="wave-container">
-      <div class="wave-line wave-neva"></div>
-      <div class="wave-line wave-marie"></div>
-      <!-- 두 파동이 겹칠 때마다 노이즈 발생 -->
-      <div class="merge-conflict-warning">MERGE CONFLICT DETECTED</div>
-    </div>
-    
-    <div class="data-block">
-      <p>HR: <span class="blink">72 bpm</span> (Stable)</p>
-      <p>Temp: 36.8°C</p>
-      <p>Cortisol: <span class="text-alert">Elevated</span></p>
-      <p>Neural_Link: <span class="text-green">Standby (Airgap)</span></p>
-    </div>
-    
-    <div class="nav-links mt-4">
-      <p class="text-xs text-gray-500 mb-1">// ACCESS_LOG</p>
-      <a href="/novels" class="hud-btn">> [READ_NOVELS]</a>
-      <a href="/gallery" class="hud-btn">> [VIEW_ARCHIVE]</a>
-    </div>
-  </div>
+    <!-- 🔲 메인 HUD 박스 -->
+    <div class="relative w-full bg-card/5 border border-primary/20 rounded-xl p-6 md:p-12 font-mono shadow-2xl backdrop-blur-sm overflow-hidden group">
+      
+      <!-- ✨ 구석 애니메이션 (조준경 마커) -->
+      <div class="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
+      <div class="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
+      <div class="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
+      <div class="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
 
-  <!-- 중앙: 메인 시야 (여백) & 타겟팅 -->
-  <div class="center-view">
-    <div class="targeting-reticle">
-      <div class="crosshair"></div>
-      <div class="reticle-text">TARGET_LOCKED</div>
-    </div>
-  </div>
+      <!-- 📱 내부 콘텐츠 그리드 (모바일: 1열, 데스크톱: 3열) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 relative z-10">
+        
+        <!-- ⬅️ 좌측 패널 (시스템 로그 & 상태) -->
+        <div class="col-span-1 flex flex-col gap-6 order-2 lg:order-1">
+          <!-- 바이오 싱크 블록 -->
+          <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
+            <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BIO_SYNC : ACTIVE ]</h3>
+            <ul class="text-sm space-y-2 text-foreground/80">
+              <li class="flex justify-between"><span>TARGET:</span> <span>Neva_West</span></li>
+              <li class="flex justify-between"><span>HR_STATUS:</span> <span class="text-green-500/80 animate-pulse">Stable</span></li>
+              <li class="flex justify-between"><span>NEURAL_LINK:</span> <span>Merged</span></li>
+            </ul>
+          </div>
+          
+          <!-- 백그라운드 태스크 블록 -->
+          <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
+            <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BACKGROUND_TASKS ]</h3>
+            <ul class="text-xs space-y-3 text-muted-foreground">
+              <li class="line-through opacity-50">[✓] 함선 블랙박스 식별자 세탁</li>
+              <li class="text-foreground/90">[▶] 에우린 메인 서버 양자 해킹 대기</li>
+              <li>[■] 수면 데이터 기반 호르몬 패턴 분석</li>
+            </ul>
+          </div>
+        </div>
 
-  <!-- 우측 패널: 백그라운드 태스크 및 시스템 로그 -->
-  <div class="panel right-panel">
-    <div class="panel-header">[ BACKGROUND_TASKS ]</div>
-    
-    <ul class="task-list">
-      <li class="task-done">[✓] 함선 블랙박스 교체 및 도색 세탁</li>
-      <li class="task-done">[✓] 식품 재조합기 레시피 업데이트 (버전 48)</li>
-      <li class="task-active">[▶] 네바 호르몬 사이클 및 수면 패턴 분석 중...</li>
-      <li class="task-active">[▶] 에우린 메인 서버 양자 해킹 시나리오 대기 중...</li>
-      <li class="task-wait">[■] 캐스 제거 조건 재계산 (현재 조건 충족: 1/5)</li>
-    </ul>
+        <!-- 🎯 중앙 패널 (메인 타이틀 & 환영 인사) -->
+        <div class="col-span-1 lg:col-span-2 flex flex-col justify-center order-1 lg:order-2">
+          
+          <div class="mb-8">
+            <p class="text-primary/80 text-sm tracking-widest mb-2">ACCESS GRANTED</p>
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">MERGE CONFLICT</h1>
+            <p class="text-muted-foreground leading-relaxed break-keep max-w-xl">
+              이곳은 우주 외곽을 떠도는 퇴역 군함 코모란트의 아카이브입니다.<br/>
+              지각이 있는 인공 존재(ACE)와 강화 인간의 병합 데이터를 기록하고 있습니다.
+            </p>
+          </div>
 
-    <div class="terminal-log mt-4">
-      <p class="text-xs text-gray-500 mb-1">// SYSTEM_LOG</p>
-      <div class="typewriter-text">
-        <p>> Warning: Unregistered access detected.</p>
-        <p>> Bypassing security protocol...</p>
-        <p>> <span class="text-alert">"네바가 좋아하는 걸 저만 놓치면 손해잖아요."</span></p>
+          <!-- 빠른 이동 버튼 영역 -->
+          <div class="flex flex-col sm:flex-row gap-4 mt-4">
+            <a href="/blog" class="px-6 py-3 bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50 transition-all rounded-md text-center text-sm tracking-widest font-bold">
+              [ ACCESS_NOVELS ]
+            </a>
+            <a href="/gallery" class="px-6 py-3 bg-card border border-border/50 hover:border-foreground/50 transition-all rounded-md text-center text-sm tracking-widest text-muted-foreground hover:text-foreground">
+              [ VIEW_GALLERY ]
+            </a>
+          </div>
+
+          <!-- 사이트 이용 안내 (작게 하단 배치) -->
+          <div class="mt-12 pt-6 border-t border-border/20 text-xs text-muted-foreground space-y-2">
+            <p>> <strong>Novels:</strong> 오리지널 SF 소설 연재 공간입니다. (※ 유혈 및 하드코어 묘사 주의)</p>
+            <p>> <strong>Gallery:</strong> 커미션 및 스케치 시각 데이터가 자동 분류됩니다.</p>
+            <p class="opacity-60 pt-2">© 2026 둑중개. All Data Encrypted. Unauthorized access will be monitored.</p>
+          </div>
+
+        </div>
+
       </div>
     </div>
-    
-    <div class="copyright-info mt-4 text-xs text-gray-600">
-      <p>ALL DATA ENCRYPTED & CLASSIFIED</p>
-      <p>UNAUTHORIZED ACCESS WILL BE TERMINATED</p>
-      <p>&copy; 2026 Merge Conflict. All rights reserved.</p>
-    </div>
   </div>
 
-</div>
+</BaseLayout>
 
 <style>
-/* CSS 스타일링 (Tailwind CSS와 병행 사용 가능) */
-:root {
-  --hud-color: #0ff; /* 청록색 (마리) */
-  --alert-color: #f00; /* 붉은색 (경고/네바) */
-  --bg-dark: #050505;
-}
-
-body {
-  background-color: var(--bg-dark);
-  color: var(--hud-color);
-  font-family: 'Courier New', Courier, monospace; /* 터미널 폰트 */
-  margin: 0;
-  overflow: hidden; /* 스크롤 방지하여 헬멧 뷰 느낌 강조 */
-}
-
-.hud-container {
-  display: flex;
-  justify-content: space-between;
-  height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  position: relative;
-  /* 브라운관 느낌의 스캔라인 효과 */
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-  background-size: 100% 2px, 3px 100%;
-}
-
-.panel {
-  width: 25%;
-  background: rgba(0, 255, 255, 0.05);
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  padding: 15px;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-}
-
-.panel-header {
-  font-weight: bold;
-  border-bottom: 1px solid var(--hud-color);
-  padding-bottom: 5px;
-  margin-bottom: 15px;
-  letter-spacing: 2px;
-}
-
-/* 파동 애니메이션 (네바와 마리의 융합) */
-.wave-container {
-  height: 100px;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 20px;
-  border: 1px dashed rgba(0, 255, 255, 0.3);
-}
-
-.wave-line {
-  position: absolute;
-  top: 50%;
-  width: 200%;
-  height: 2px;
-  opacity: 0.7;
-}
-
-.wave-neva {
-  background-color: var(--alert-color);
-  /* 사인파 형태를 CSS로 근사하거나 SVG 사용 권장 */
-  animation: waveMove 3s infinite linear, glitch 5s infinite; 
-}
-
-.wave-marie {
-  background-color: var(--hud-color);
-  animation: waveMove 4s infinite linear reverse;
-}
-
-.merge-conflict-warning {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--alert-color);
-  font-weight: bold;
-  font-size: 0.8rem;
-  opacity: 0;
-  animation: flash 4s infinite;
-}
-
-/* 데이터 블록 및 리스트 */
-.data-block p, .task-list li {
-  margin: 5px 0;
-  font-size: 0.9rem;
-}
-
-.task-list {
-  list-style: none;
-  padding: 0;
-}
-
-.task-done { color: rgba(0, 255, 255, 0.5); text-decoration: line-through; }
-.task-active { color: #fff; text-shadow: 0 0 5px var(--hud-color); }
-.task-wait { color: gray; }
-
-.text-alert { color: var(--alert-color); }
-.text-green { color: #0f0; }
-.blink { animation: blinker 1s linear infinite; }
-
-/* 중앙 타겟팅 UI */
-.center-view {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.targeting-reticle {
-  width: 300px;
-  height: 300px;
-  border: 1px solid rgba(0, 255, 255, 0.3);
-  border-radius: 50%;
-  position: relative;
-  animation: rotateSlow 20s infinite linear;
-}
-
-.crosshair {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--hud-color);
-  transform: translate(-50%, -50%);
-}
-.crosshair::before, .crosshair::after {
-    content:'';
-    position: absolute;
-    background: var(--hud-color);
-}
-.crosshair::before { top: 50%; left: -10px; right: -10px; height: 1px; }
-.crosshair::after { left: 50%; top: -10px; bottom: -10px; width: 1px; }
-
-
-.reticle-text {
-  position: absolute;
-  bottom: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.8rem;
-  letter-spacing: 3px;
-  animation: blinker 2s infinite;
-}
-
-/* 버튼 및 링크 */
-.hud-btn {
-  display: block;
-  color: var(--hud-color);
-  text-decoration: none;
-  margin: 5px 0;
-  padding: 5px;
-  border: 1px solid transparent;
-  transition: all 0.3s;
-}
-
-.hud-btn:hover {
-  background-color: rgba(0, 255, 255, 0.2);
-  border: 1px solid var(--hud-color);
-  padding-left: 10px; /* 호버 시 화살표 이동 효과 */
-}
-
-/* 타이핑 효과 */
-.typewriter-text p {
-  overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: .15em solid var(--hud-color); /* The typwriter cursor */
-  white-space: nowrap; /* Keeps the content on a single line */
-  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-  letter-spacing: .15em; /* Adjust as needed */
-  animation: 
-    typing 3.5s steps(40, end),
-    blink-caret .75s step-end infinite;
-}
-
-/* Animations */
-@keyframes blinker { 50% { opacity: 0; } }
-@keyframes flash { 0%, 90% { opacity: 0; } 95% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes rotateSlow { 100% { transform: rotate(360deg); } }
-@keyframes waveMove { 100% { transform: translateX(-50%); } }
-@keyframes glitch {
-  2%, 64% { transform: translate(2px,0) skew(0deg); }
-  4%, 60% { transform: translate(-2px,0) skew(0deg); }
-  62% { transform: translate(0,0) skew(5deg); }
-}
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: var(--hud-color); }
-}
-
+  /* 터미널 타이핑/깜빡임 효과를 위한 커스텀 CSS */
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+  }
 </style>
