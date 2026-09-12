@@ -58,9 +58,15 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     </ul>
   </div>
   
-  <!-- 백그라운드 태스크 블록 (기존과 동일) -->
-  <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
-    <!-- ... 기존 백그라운드 태스크 코드 ... -->
+  <!-- 백그라운드 태스크 블록 -->
+          <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
+            <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BACKGROUND_TASKS ]</h3>
+            <ul class="text-xs space-y-3 text-muted-foreground">
+              <li class="line-through opacity-50">[✓] 함선 블랙박스 식별자 세탁</li>
+              <li class="text-foreground/90">[▶] 에우린 메인 서버 양자 해킹 대기</li>
+              <li>[■] 수면 데이터 기반 호르몬 패턴 분석</li>
+            </ul>
+          </div>
   </div>
 </div>
 
@@ -108,15 +114,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   }
 </style>
           
-          <!-- 백그라운드 태스크 블록 -->
-          <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
-            <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BACKGROUND_TASKS ]</h3>
-            <ul class="text-xs space-y-3 text-muted-foreground">
-              <li class="line-through opacity-50">[✓] 함선 블랙박스 식별자 세탁</li>
-              <li class="text-foreground/90">[▶] 에우린 메인 서버 양자 해킹 대기</li>
-              <li>[■] 수면 데이터 기반 호르몬 패턴 분석</li>
-            </ul>
-          </div>
+          
         </div>
 
         <!-- 🎯 중앙 패널 (메인 타이틀 & 환영 인사) -->
