@@ -18,16 +18,19 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       <!-- 📱 내부 콘텐츠 그리드 (모바일: 1열, 데스크톱: 3열) -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 relative z-10">
         
-        <!-- ⬅️ 좌측 패널 (실시간 생체 데이터 & 움직이는 그래프) -->
+        <!-- ⬅️ 좌측 패널 (실시간 생체 데이터 & 심전도 그래프) -->
         <div class="col-span-1 flex flex-col gap-6 order-2 lg:order-1">
           
-          <!-- 바이오 싱크 블록 (동적) -->
           <div class="p-4 border border-border/30 bg-background/40 rounded-lg overflow-hidden relative group">
             <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BIO_SYNC : ACTIVE ]</h3>
             
-            <!-- 📈 실시간 파동 그래프 애니메이션 -->
-            <div class="h-16 w-full mb-4 relative overflow-hidden flex items-end gap-1 opacity-70" id="live-graph">
-              <!-- JS로 막대들이 동적으로 생성됨 -->
+            <!-- 📈 SVG 심전도 애니메이션 (자바스크립트 의존성 제거) -->
+            <div class="h-16 w-full mb-4 relative overflow-hidden flex items-center opacity-80 border-b border-border/10">
+              <svg class="absolute w-[200%] h-full ecg-animate text-[#329852]" viewBox="0 0 200 100" preserveAspectRatio="none">
+                <!-- 강화 심장을 표현하는 폭이 크고 날카로운 파동 -->
+                <path d="M0,50 L20,50 L25,30 L35,90 L45,10 L55,70 L60,50 L100,50 L120,50 L125,30 L135,90 L145,10 L155,70 L160,50 L200,50" 
+                      fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
             </div>
 
             <!-- 📊 실시간 변동 데이터 리스트 -->
@@ -38,23 +41,23 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
               </li>
               <li class="flex justify-between items-center">
                 <span class="opacity-70">HEART_RATE:</span> 
-                <span class="text-green-400 font-bold"><span id="bpm-value">72</span> bpm</span>
+                <span class="text-[#329852] font-bold"><span id="bpm-value">58</span> bpm</span>
               </li>
               <li class="flex justify-between items-center">
-                <span class="opacity-70">OXYTOCIN_LVL:</span> 
-                <span class="text-primary"><span id="oxy-value">42</span>%</span>
+                <span class="opacity-70">O2_CONSUMPTION:</span> 
+                <span class="text-primary"><span id="o2-value">45.2</span> L/h</span>
+              </li>
+              <li class="flex justify-between items-center">
+                <span class="opacity-70">CORE_TEMP:</span> 
+                <span class="text-orange-400/90"><span id="temp-value">37.2</span> °C</span>
               </li>
               <li class="flex justify-between items-center">
                 <span class="opacity-70">PUPIL_DILATION:</span> 
-                <span><span id="pupil-value">12</span>% <span class="text-[10px] text-red-400 animate-pulse">(Gazing)</span></span>
-              </li>
-              <li class="flex justify-between items-center">
-                <span class="opacity-70">LIP_BITING_FREQ:</span> 
-                <span id="lip-value">6 / hr</span>
+                <span><span id="pupil-value">12</span>%</span>
               </li>
               <li class="flex justify-between items-center">
                 <span class="opacity-70">PROSTHETIC_SYNC:</span> 
-                <span class="text-green-500">98.4%</span>
+                <span class="text-[#329852]">98.4%</span>
               </li>
             </ul>
           </div>
@@ -109,51 +112,35 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
+  // DOM 생성 오류를 방지하기 위해 단순 텍스트 변경 로직만 유지합니다.
   document.addEventListener('astro:page-load', () => {
-    // 1. 숫자 랜덤 업데이트
     const bpmEl = document.getElementById('bpm-value');
-    const oxyEl = document.getElementById('oxy-value');
+    const o2El = document.getElementById('o2-value');
+    const tempEl = document.getElementById('temp-value');
     const pupilEl = document.getElementById('pupil-value');
 
-    if(bpmEl && oxyEl && pupilEl) {
+    if(bpmEl && o2El && tempEl && pupilEl) {
       setInterval(() => {
-        // 심박수: 68 ~ 85 사이 변동
-        bpmEl.innerText = Math.floor(Math.random() * (85 - 68 + 1)) + 68;
-        // 옥시토신: 40 ~ 60 사이 변동
-        oxyEl.innerText = Math.floor(Math.random() * (60 - 40 + 1)) + 40;
-        // 동공 확장: 10 ~ 15 사이 변동
+        // 강화 심장: 55 ~ 65 사이의 낮고 묵직한 박동
+        bpmEl.innerText = Math.floor(Math.random() * (65 - 55 + 1)) + 55;
+        // 산소 소모량: 45.0 ~ 48.0 L/h
+        o2El.innerText = (Math.random() * (48.0 - 45.0) + 45.0).toFixed(1);
+        // 체온: 37.0 ~ 37.5 사이 (기본 체온이 약간 높은 상태)
+        tempEl.innerText = (Math.random() * (37.5 - 37.0) + 37.0).toFixed(1);
+        // 동공 확장: 10 ~ 15
         pupilEl.innerText = Math.floor(Math.random() * (15 - 10 + 1)) + 10;
       }, 2000);
-    }
-
-    // 2. 동적 파형 그래프 생성 (이퀄라이저 스타일)
-    const graphContainer = document.getElementById('live-graph');
-    if (graphContainer) {
-      graphContainer.innerHTML = ''; // 초기화
-      const barCount = 30; // 막대 개수
-      
-      for (let i = 0; i < barCount; i++) {
-        const bar = document.createElement('div');
-        bar.className = 'w-full bg-primary/40 rounded-t-sm';
-        // 애니메이션 딜레이를 다르게 주어 파도치는 느낌 연출
-        bar.style.animation = `bounce ${0.5 + Math.random()}s infinite alternate ease-in-out`;
-        bar.style.height = `${Math.floor(Math.random() * 80) + 10}%`;
-        graphContainer.appendChild(bar);
-      }
     }
   });
 </script>
 
 <style>
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  /* SVG 심전도가 왼쪽으로 무한히 흐르는 애니메이션 */
+  .ecg-animate {
+    animation: ecgSlide 1.5s linear infinite;
   }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .5; }
-  }
-  @keyframes bounce {
-    0% { height: 10%; background-color: rgba(var(--primary), 0.2); }
-    100% { height: 90%; background-color: rgba(var(--primary), 0.8); }
+  @keyframes ecgSlide {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 </style>
