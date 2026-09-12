@@ -106,23 +106,30 @@ galleryItems.sort(() => Math.random() - 0.5);
               )}
             </div>
             
-            <div class="p-3 border-t border-border/20 flex items-center justify-between gap-2">
-              <span class="text-sm text-muted-foreground font-mono truncate">
-                {item.leftText}
-              </span>
-
-              {item.rightBadge && (
-                <span class="text-xs px-2 py-0.5 border border-border/50 bg-background/50 rounded text-foreground/80 tracking-wider shrink-0">
-                  {item.rightBadge}
+            <!-- 텍스트 캡션 (디자인 통합 및 여백 조정) -->
+            <div class="p-4 border-t border-border/10 flex flex-col gap-1.5">
+              
+              <!-- 상단: 닉네임 & 뱃지 -->
+              <div class="flex items-center justify-between gap-2">
+                <!-- 닉네임: mono를 빼고, 굵기와 밝기를 올려서 제일 먼저 눈에 띄게 -->
+                <span class="text-sm font-medium text-foreground/90 truncate">
+                  {item.leftText}
                 </span>
-              )}
-            </div>
-            {item.comment && (
-              <div class="px-3 pb-3 text-sm font-light text-muted-foreground leading-relaxed break-keep">
-              <p>{item.comment}</p>
+
+                <!-- 뱃지: 둥글기를 조금 더 주고 은은하게 -->
+                {item.rightBadge && (
+                  <span class="text-[10px] px-2 py-0.5 border border-border/40 bg-card/50 rounded-md text-muted-foreground tracking-wider shrink-0">
+                    {item.rightBadge}
+                  </span>
+                )}
               </div>
-            )}
-          </div>
+            {item.comment && (
+                <p class="text-[13px] text-muted-foreground/80 leading-relaxed break-keep mt-0.5">
+                  {item.comment}
+                </p>
+              )}
+
+            </div>
         ))}
       </div>
     )}
