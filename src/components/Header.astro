@@ -39,7 +39,9 @@ const containerClass =
   <div class:list={[containerClass, 'flex h-14 items-center justify-between']}>
     <!-- Logo -->
     <div class="flex">
-      <Logo />
+      <a href="/" aria-label="Home" class="transition-opacity hover:opacity-80">
+        <Logo />
+      </a>
     </div>
 
     <!-- Desktop Navigation (hidden on mobile) -->
