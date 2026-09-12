@@ -15,19 +15,18 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
       <div class="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
       <div class="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-primary/50 opacity-70 group-hover:opacity-100 transition-opacity"></div>
 
-      <!-- 📱 내부 콘텐츠 그리드 (모바일: 1열, 데스크톱: 3열) -->
+      <!-- 📱 내부 콘텐츠 그리드 -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 relative z-10">
         
-        <!-- ⬅️ 좌측 패널 (실시간 생체 데이터 & 심전도 그래프) -->
+        <!-- ⬅️ 좌측 패널 (실시간 생체/호르몬 데이터 & 심전도) -->
         <div class="col-span-1 flex flex-col gap-6 order-2 lg:order-1">
           
           <div class="p-4 border border-border/30 bg-background/40 rounded-lg overflow-hidden relative group">
             <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BIO_SYNC : ACTIVE ]</h3>
             
-            <!-- 📈 SVG 심전도 애니메이션 (자바스크립트 의존성 제거) -->
+            <!-- 📈 SVG 심전도 애니메이션 -->
             <div class="h-16 w-full mb-4 relative overflow-hidden flex items-center opacity-80 border-b border-border/10">
               <svg class="absolute w-[200%] h-full ecg-animate text-[#329852]" viewBox="0 0 200 100" preserveAspectRatio="none">
-                <!-- 강화 심장을 표현하는 폭이 크고 날카로운 파동 -->
                 <path d="M0,50 L20,50 L25,30 L35,90 L45,10 L55,70 L60,50 L100,50 L120,50 L125,30 L135,90 L145,10 L155,70 L160,50 L200,50" 
                       fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -37,7 +36,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
             <ul class="text-[13px] space-y-2 text-foreground/80 font-mono">
               <li class="flex justify-between items-center">
                 <span class="opacity-70">TARGET:</span> 
-                <span>Neva_West</span>
+                <span>Human_Neva</span>
               </li>
               <li class="flex justify-between items-center">
                 <span class="opacity-70">HEART_RATE:</span> 
@@ -45,17 +44,21 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
               </li>
               <li class="flex justify-between items-center">
                 <span class="opacity-70">O2_CONSUMPTION:</span> 
-                <span class="text-primary"><span id="o2-value">45.2</span> L/h</span>
+                <span class="text-[#329852]"><span id="o2-value">45.2</span> L/h</span>
               </li>
               <li class="flex justify-between items-center">
                 <span class="opacity-70">CORE_TEMP:</span> 
                 <span class="text-orange-400/90"><span id="temp-value">37.2</span> °C</span>
               </li>
               <li class="flex justify-between items-center">
-                <span class="opacity-70">PUPIL_DILATION:</span> 
-                <span><span id="pupil-value">12</span>%</span>
+                <span class="opacity-70">CORTISOL_LVL:</span> 
+                <span class="text-blue-400/90"><span id="cortisol-value">9.4</span> ㎍/dL</span>
               </li>
               <li class="flex justify-between items-center">
+                <span class="opacity-70">OXYTOCIN_LVL:</span> 
+                <span class="text-pink-400/90"><span id="oxy-value">42</span> % <span class="text-[10px] animate-pulse">(High)</span></span>
+              </li>
+              <li class="flex justify-between items-center mt-2 pt-2 border-t border-border/10">
                 <span class="opacity-70">PROSTHETIC_SYNC:</span> 
                 <span class="text-[#329852]">98.4%</span>
               </li>
@@ -65,10 +68,14 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
           <!-- 백그라운드 태스크 블록 -->
           <div class="p-4 border border-border/30 bg-background/40 rounded-lg">
             <h3 class="text-xs text-muted-foreground tracking-widest mb-3 border-b border-border/20 pb-2">[ BACKGROUND_TASKS ]</h3>
-            <ul class="text-xs space-y-3 text-muted-foreground">
-              <li class="line-through opacity-50">[✓] 함선 블랙박스 식별자 세탁</li>
-              <li class="text-foreground/90">[▶] 에우린 메인 서버 양자 해킹 대기</li>
-              <li>[■] 수면 데이터 기반 호르몬 패턴 분석</li>
+            <ul class="text-[11px] leading-relaxed space-y-3 text-muted-foreground font-mono">
+              <li class="line-through opacity-40">[✓] 제3 화물칸 대기 순환 필터 미세먼지 정화 완료</li>
+              <li class="text-foreground/90">[▶] Human_Neva 샤워 모니터링 (예상: 운동 루틴 종료 후 약 4시간 뒤)</li>
+              <li>[✓] Human_Cathode 온수 사용량 50% 제한 적용 (사유: 에너지 절약)</li>
+              <li>[▶] 주 엔진 냉각수 파이프라인 열화상 스캔 및 위상 보정 중...</li>
+              <li class="text-foreground/90">[▶] Human_Neva 수분 손실에 따른 맞춤형 전해질 음료 배합 중...</li>
+              <li>[✓] Human_Cathode 생활구역B 출입 권한 박탈 (사유: 오염 및 소음 방지)</li>
+              <li class="text-orange-400/80">[■] Human_Neva 골반 및 우측 의체 접합부 근육통 방지 온열 마사지 모듈 (대기)</li>
             </ul>
           </div>
 
@@ -112,21 +119,26 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-  // DOM 생성 오류를 방지하기 위해 단순 텍스트 변경 로직만 유지합니다.
   document.addEventListener('astro:page-load', () => {
     const bpmEl = document.getElementById('bpm-value');
     const o2El = document.getElementById('o2-value');
     const tempEl = document.getElementById('temp-value');
+    const cortisolEl = document.getElementById('cortisol-value');
+    const oxyEl = document.getElementById('oxy-value');
     const pupilEl = document.getElementById('pupil-value');
 
-    if(bpmEl && o2El && tempEl && pupilEl) {
+    if(bpmEl && o2El && tempEl && cortisolEl && oxyEl && pupilEl) {
       setInterval(() => {
-        // 강화 심장: 55 ~ 65 사이의 낮고 묵직한 박동
+        // 강화 심장: 55 ~ 65 사이의 묵직한 박동
         bpmEl.innerText = Math.floor(Math.random() * (65 - 55 + 1)) + 55;
         // 산소 소모량: 45.0 ~ 48.0 L/h
         o2El.innerText = (Math.random() * (48.0 - 45.0) + 45.0).toFixed(1);
-        // 체온: 37.0 ~ 37.5 사이 (기본 체온이 약간 높은 상태)
+        // 체온: 37.0 ~ 37.5 사이
         tempEl.innerText = (Math.random() * (37.5 - 37.0) + 37.0).toFixed(1);
+        // 코르티솔: 8.0 ~ 12.0 (스트레스 수치 낮음 = 안정된 상태)
+        cortisolEl.innerText = (Math.random() * (12.0 - 8.0) + 8.0).toFixed(1);
+        // 옥시토신: 40 ~ 65% (애착 호르몬 활성화 상태)
+        oxyEl.innerText = Math.floor(Math.random() * (65 - 40 + 1)) + 40;
         // 동공 확장: 10 ~ 15
         pupilEl.innerText = Math.floor(Math.random() * (15 - 10 + 1)) + 10;
       }, 2000);
@@ -135,7 +147,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 </script>
 
 <style>
-  /* SVG 심전도가 왼쪽으로 무한히 흐르는 애니메이션 */
   .ecg-animate {
     animation: ecgSlide 1.5s linear infinite;
   }
